@@ -3,7 +3,7 @@
 
 import 'dart:convert';
 
-import 'package:tuturloom/utils/app_exports.dart';
+import 'package:tutorloom/utils/app_exports.dart';
 
 /// One lesson: its content, its completion, its task and its quiz.
 class LessonRepository {

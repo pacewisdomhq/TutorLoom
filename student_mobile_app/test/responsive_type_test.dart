@@ -9,7 +9,7 @@
 // it, and these tests are what keep the clamp honest.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tuturloom/utils/app_exports.dart';
+import 'package:tutorloom/utils/app_exports.dart';
 
 void main() {
   // Declared first on purpose: the package keeps its device metrics in

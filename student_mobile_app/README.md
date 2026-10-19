@@ -3,7 +3,7 @@ SPDX-FileCopyrightText: 2026 Pace Wisdom Solutions Pvt. Ltd.
 SPDX-License-Identifier: Apache-2.0
 -->
 
-# Tuturloom
+# TutorLoom
 
 A learner-only mobile client (Android and iOS) for a multi-tenant, white-label corporate
 learning management system.
@@ -89,7 +89,7 @@ for Android.
 To point a run at another backend without touching `.env`:
 
 ```bash
-flutter run --dart-define=API_BASE_URL=https://tuturloom.example.com
+flutter run --dart-define=API_BASE_URL=https://tutorloom.example.com
 ```
 
 ### Configuration
@@ -154,7 +154,7 @@ Three conventions that are not obvious from the tree:
 
 - **The barrel.** `lib/utils/app_exports.dart` re-exports nearly every package import, util and
   feature file, and almost every file's only import is
-  `import 'package:tuturloom/utils/app_exports.dart';`. A new file must be exported from it, and a new
+  `import 'package:tutorloom/utils/app_exports.dart';`. A new file must be exported from it, and a new
   package import belongs there rather than in each file that needs it.
 - **MVVM with Provider only.** No Riverpod, no Bloc. View models are `ChangeNotifier`s consumed
   with `context.watch` / `read` / `select` / `Consumer`, and they all extend `BaseProvider`,
@@ -190,11 +190,11 @@ Pass the backend in explicitly; release builds should not depend on a local `.en
 
 ```bash
 # Play Store upload (preferred):
-flutter build appbundle --release --dart-define=API_BASE_URL=https://tuturloom.example.com
+flutter build appbundle --release --dart-define=API_BASE_URL=https://tutorloom.example.com
 # → build/app/outputs/bundle/release/app-release.aab
 
 # Sideloadable APKs, one per ABI:
-flutter build apk --release --split-per-abi --dart-define=API_BASE_URL=https://tuturloom.example.com
+flutter build apk --release --split-per-abi --dart-define=API_BASE_URL=https://tutorloom.example.com
 # → build/app/outputs/flutter-apk/
 ```
 
@@ -207,7 +207,7 @@ flutter build apk --release --split-per-abi --dart-define=API_BASE_URL=https://t
 ### iOS
 
 ```bash
-flutter build ipa --release --dart-define=API_BASE_URL=https://tuturloom.example.com
+flutter build ipa --release --dart-define=API_BASE_URL=https://tutorloom.example.com
 # → build/ios/ipa/*.ipa, plus an Xcode archive to upload with Transporter
 ```
 
@@ -224,11 +224,11 @@ platforms read them from there.
 
 ## Changing the app name
 
-The name lives in **four** places and they must agree. It is currently `Tuturloom` everywhere.
+The name lives in **four** places and they must agree. It is currently `TutorLoom` everywhere.
 
 | Where                                        | What to change                                           |
 | -------------------------------------------- | -------------------------------------------------------- |
-| `android/app/src/main/AndroidManifest.xml` | `android:label="Tuturloom"` — the Android launcher label |
+| `android/app/src/main/AndroidManifest.xml` | `android:label="TutorLoom"` — the Android launcher label |
 | `ios/Runner/Info.plist`                    | `CFBundleDisplayName` — the iOS home-screen label     |
 | `ios/Runner/Info.plist`                    | `CFBundleName` — the short name iOS falls back to     |
 | `lib/config/l10n/app_en.arb`               | `"appName"` — what the app calls itself in its own UI |
@@ -237,7 +237,7 @@ Then run `flutter gen-l10n` (for the `.arb` change) and rebuild. A hot reload wi
 the two native files.
 
 **The bundle identifier is a separate thing**, and renaming the app is usually when you notice
-it. It is `com.tuturloom.student`, no longer the `flutter create` placeholder. Changing it means:
+it. It is `com.tutorloom.student`, no longer the `flutter create` placeholder. Changing it means:
 
 - `android/app/build.gradle.kts` — both `namespace` and `applicationId`, and the
   `src/main/kotlin/…` directory the `MainActivity.kt` package declaration mirrors;

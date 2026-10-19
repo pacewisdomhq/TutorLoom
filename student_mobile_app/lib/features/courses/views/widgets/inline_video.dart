@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import 'package:chewie/chewie.dart';
-import 'package:tuturloom/utils/app_exports.dart';
+import 'package:tutorloom/utils/app_exports.dart';
 import 'package:video_player/video_player.dart';
 
 /// A video inside an expanded roadmap row: poster first, player on tap.

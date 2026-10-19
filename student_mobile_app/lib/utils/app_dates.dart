@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import 'package:intl/intl.dart';
-import 'package:tuturloom/utils/app_exports.dart';
+import 'package:tutorloom/utils/app_exports.dart';
 
 /// Date and duration formatting.
 ///

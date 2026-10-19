@@ -3,7 +3,7 @@
 
 import 'dart:math' as math;
 
-import 'package:tuturloom/utils/app_exports.dart';
+import 'package:tutorloom/utils/app_exports.dart';
 
 /// The completion ring from the design: one arc over a flat track.
 ///

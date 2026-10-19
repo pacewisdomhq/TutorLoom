@@ -1,8 +1,8 @@
 # SPDX-FileCopyrightText: 2026 Pace Wisdom Solutions Pvt. Ltd.
 # SPDX-License-Identifier: Apache-2.0
 
-name: tuturloom
-description: "Tuturloom is a student-friendly platform that makes learning simple, engaging, and accessible anytime, anywhere."
+name: tutorloom
+description: "TutorLoom is a student-friendly platform that makes learning simple, engaging, and accessible anytime, anywhere."
 publish_to: 'none'
 version: 1.0.0+1
 

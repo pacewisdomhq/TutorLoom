@@ -4,7 +4,7 @@
 import 'dart:io';
 
 import 'package:flutter_file_dialog/flutter_file_dialog.dart';
-import 'package:tuturloom/utils/app_exports.dart';
+import 'package:tutorloom/utils/app_exports.dart';
 import 'package:path_provider/path_provider.dart';
 
 /// Where a downloaded file ended up, and whether the learner can find it
@@ -38,7 +38,7 @@ class SavedFile {
 /// Step 2 used to be Android-only, on the grounds that iOS already lists the
 /// app's documents in Files (`UIFileSharingEnabled` and
 /// `LSSupportsOpeningDocumentsInPlace` are set in Info.plist). It does — but
-/// only under *On My iPhone → Tuturloom*, which is not where a learner looks, and
+/// only under *On My iPhone → TutorLoom*, which is not where a learner looks, and
 /// tapping Download and being told "saved" with no say in where is not what
 /// the button appears to offer.
 abstract final class FileSaver {

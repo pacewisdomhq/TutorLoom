@@ -17,7 +17,7 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tuturloom/utils/app_exports.dart';
+import 'package:tutorloom/utils/app_exports.dart';
 
 import 'support/fake_api.dart';
 
@@ -72,7 +72,7 @@ void main() {
     // The reachability checker polls on a real timer that outlives the tree.
     InternetProvider.pollingEnabled = false;
 
-    tempDir = await Directory.systemTemp.createTemp('tuturloom_tab_refresh_');
+    tempDir = await Directory.systemTemp.createTemp('tutorloom_tab_refresh_');
     Hive.init(tempDir.path);
     for (final String box in HSBox.all) {
       await Hive.openBox<dynamic>(box);

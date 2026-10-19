@@ -11,7 +11,7 @@
 // from `colorScheme.surface`: the card colour, not the page's.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tuturloom/utils/app_exports.dart';
+import 'package:tutorloom/utils/app_exports.dart';
 
 void main() {
   /// Everything the transition can paint has to be dark, not merely "the

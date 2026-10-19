@@ -4,10 +4,10 @@
 
 <br/>
 
-[![CI](https://github.com/Pace-Wisdom-Solutions-Pvt-Ltd/Tuturloom/actions/workflows/ci.yml/badge.svg)](https://github.com/Pace-Wisdom-Solutions-Pvt-Ltd/Tuturloom/actions/workflows/ci.yml)
+[![CI](https://github.com/pacewisdomhq/TutorLoom/actions/workflows/ci.yml/badge.svg)](https://github.com/pacewisdomhq/TutorLoom/actions/workflows/ci.yml)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-2F78BD.svg)](LICENSE)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-CE3C71.svg)](CONTRIBUTING.md)
-[![GitHub stars](https://img.shields.io/github/stars/Pace-Wisdom-Solutions-Pvt-Ltd/Tuturloom?style=flat&logo=github&color=9A58C0)](https://github.com/Pace-Wisdom-Solutions-Pvt-Ltd/Tuturloom/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/pacewisdomhq/TutorLoom?style=flat&logo=github&color=9A58C0)](https://github.com/pacewisdomhq/TutorLoom/stargazers)
 
 ![Python](https://img.shields.io/badge/Python-3.13-3776AB?logo=python&logoColor=white)
 ![Django](https://img.shields.io/badge/Django-6-092E20?logo=django&logoColor=white)
@@ -187,8 +187,8 @@ One account can hold several roles (for example a Trainer who is also an Institu
 The fastest way to run everything (Postgres, Redis, the Django API, a Celery worker and the web app) is Docker. Nothing else to install.
 
 ```bash
-git clone https://github.com/Pace-Wisdom-Solutions-Pvt-Ltd/Tuturloom.git
-cd Tuturloom
+git clone https://github.com/pacewisdomhq/TutorLoom.git
+cd TutorLoom
 docker compose up --build
 ```
 
@@ -250,8 +250,8 @@ docker compose down                # stop; add -v to also wipe the database
 **1. Install**
 
 ```bash
-git clone https://github.com/Pace-Wisdom-Solutions-Pvt-Ltd/Tuturloom.git
-cd Tuturloom
+git clone https://github.com/pacewisdomhq/TutorLoom.git
+cd TutorLoom
 poetry env use python3.13
 poetry install
 ```

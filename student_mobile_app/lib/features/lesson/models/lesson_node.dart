@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2026 Pace Wisdom Solutions Pvt. Ltd.
 // SPDX-License-Identifier: Apache-2.0
 
-import 'package:tuturloom/utils/app_exports.dart';
+import 'package:tutorloom/utils/app_exports.dart';
 
 /// `GET …/courses/{c}/modules/{m}/nodes/{n}/` — one lesson in full.
 ///

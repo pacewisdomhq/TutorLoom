@@ -3,7 +3,7 @@
 
 import 'dart:io';
 
-import 'package:tuturloom/utils/app_exports.dart';
+import 'package:tutorloom/utils/app_exports.dart';
 
 /// Editing name, phone and profile picture.
 class EditProfileScreen extends StatelessWidget {

@@ -9,7 +9,7 @@
 // the donut trusted its totals.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tuturloom/utils/app_exports.dart';
+import 'package:tutorloom/utils/app_exports.dart';
 
 void main() {
   Future<void> pump(WidgetTester tester, Widget child) => tester.pumpWidget(

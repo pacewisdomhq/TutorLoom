@@ -3,12 +3,12 @@
 
 import 'dart:developer' as developer;
 
-import 'package:tuturloom/utils/app_exports.dart';
+import 'package:tutorloom/utils/app_exports.dart';
 
 /// The only logging call in the app — never use `print`.
 ///
 /// Stripped in release builds so nothing leaks into production logs.
-void appLogPrint(Object? message, {String tag = 'Tuturloom'}) {
+void appLogPrint(Object? message, {String tag = 'TutorLoom'}) {
   if (kReleaseMode) return;
   developer.log('$message', name: tag);
 }

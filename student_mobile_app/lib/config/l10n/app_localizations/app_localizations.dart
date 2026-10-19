@@ -99,7 +99,7 @@ abstract class AppLocalizations {
   /// The product name. An organization's own name replaces it on branded surfaces at runtime.
   ///
   /// In en, this message translates to:
-  /// **'Tuturloom'**
+  /// **'TutorLoom'**
   String get appName;
 
   /// No description provided for @appTagline.
@@ -135,7 +135,7 @@ abstract class AppLocalizations {
   /// No description provided for @signInOverline.
   ///
   /// In en, this message translates to:
-  /// **'Tuturloom for learners'**
+  /// **'TutorLoom for learners'**
   String get signInOverline;
 
   /// No description provided for @signInTitle.
@@ -147,7 +147,7 @@ abstract class AppLocalizations {
   /// No description provided for @signInFootnote.
   ///
   /// In en, this message translates to:
-  /// **'This app is for learners. Trainers and admins sign in on the Tuturloom website.'**
+  /// **'This app is for learners. Trainers and admins sign in on the TutorLoom website.'**
   String get signInFootnote;
 
   /// No description provided for @emailLabel.
@@ -171,7 +171,7 @@ abstract class AppLocalizations {
   /// No description provided for @passwordHint.
   ///
   /// In en, this message translates to:
-  /// **'Your Tuturloom password'**
+  /// **'Your TutorLoom password'**
   String get passwordHint;
 
   /// No description provided for @signInCta.
@@ -243,7 +243,7 @@ abstract class AppLocalizations {
   /// No description provided for @forgotPasswordSentBody.
   ///
   /// In en, this message translates to:
-  /// **'If that email has an account, a link to set a new password is on its way. The link opens on the Tuturloom website.'**
+  /// **'If that email has an account, a link to set a new password is on its way. The link opens on the TutorLoom website.'**
   String get forgotPasswordSentBody;
 
   /// No description provided for @backToSignIn.
@@ -765,7 +765,7 @@ abstract class AppLocalizations {
   /// No description provided for @nodeAssessmentUnavailable.
   ///
   /// In en, this message translates to:
-  /// **'This assessment cannot be taken in the app. Open it on the Tuturloom website.'**
+  /// **'This assessment cannot be taken in the app. Open it on the TutorLoom website.'**
   String get nodeAssessmentUnavailable;
 
   /// No description provided for @nothingToOpen.

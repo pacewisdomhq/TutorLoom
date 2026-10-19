@@ -11,7 +11,7 @@
 // so one left behind survives until the learner comes back.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tuturloom/utils/app_exports.dart';
+import 'package:tutorloom/utils/app_exports.dart';
 
 void main() {
   Future<BuildContext> pumpHost(WidgetTester tester) async {

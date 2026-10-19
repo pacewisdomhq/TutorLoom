@@ -13,7 +13,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appName => 'Tuturloom';
+  String get appName => 'TutorLoom';
 
   @override
   String get appTagline => 'Learn at your pace.';
@@ -31,14 +31,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noInternet => 'No internet connection.';
 
   @override
-  String get signInOverline => 'Tuturloom for learners';
+  String get signInOverline => 'TutorLoom for learners';
 
   @override
   String get signInTitle => 'Welcome back.\nKeep learning.';
 
   @override
   String get signInFootnote =>
-      'This app is for learners. Trainers and admins sign in on the Tuturloom website.';
+      'This app is for learners. Trainers and admins sign in on the TutorLoom website.';
 
   @override
   String get emailLabel => 'Email';
@@ -50,7 +50,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get passwordLabel => 'Password';
 
   @override
-  String get passwordHint => 'Your Tuturloom password';
+  String get passwordHint => 'Your TutorLoom password';
 
   @override
   String get signInCta => 'Sign in';
@@ -89,7 +89,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get forgotPasswordSentBody =>
-      'If that email has an account, a link to set a new password is on its way. The link opens on the Tuturloom website.';
+      'If that email has an account, a link to set a new password is on its way. The link opens on the TutorLoom website.';
 
   @override
   String get backToSignIn => 'Back to sign in';
@@ -385,7 +385,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nodeAssessmentUnavailable =>
-      'This assessment cannot be taken in the app. Open it on the Tuturloom website.';
+      'This assessment cannot be taken in the app. Open it on the TutorLoom website.';
 
   @override
   String get nothingToOpen => 'There is nothing to open in this lesson yet.';

@@ -13,7 +13,7 @@
 // in the name. Neither is a problem any more, and both are pinned below.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tuturloom/utils/app_exports.dart';
+import 'package:tutorloom/utils/app_exports.dart';
 
 void main() {
   /// `FileSaver._safe` strips anything outside `[\w\s.-]` and then appends the
