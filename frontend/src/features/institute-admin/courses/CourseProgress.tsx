@@ -639,7 +639,7 @@ export default function CourseProgress() {
           };
           const sortedBatches = batchSortField
             ? [...filteredBatches].sort((a, b) => {
-                let cmp = 0;
+                let cmp: number;
                 if (batchSortField === "batch") {
                   cmp = a.name.localeCompare(b.name);
                 } else {

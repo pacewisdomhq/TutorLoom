@@ -5,17 +5,17 @@
 django>=6.0.2,<7.0.0
 djangorestframework>=3.16.1,<4.0.0
 djangorestframework-simplejwt>=5.5.1,<6.0.0
-drf-spectacular>=0.29.0,<0.30.0
+drf-spectacular>=0.29.0,<0.31.0
 django-cors-headers>=4.9.0,<5.0.0
-django-environ>=0.13.0,<0.14.0
+django-environ>=0.13.0,<0.15.0
 pyjwt>=2.11.0,<3.0.0
 
 # Database
 psycopg2-binary>=2.9.11,<3.0.0
 
 # Caching & Tasks
-redis>=7.2.1,<8.0.0
-django-redis>=6.0.0,<7.0.0
+redis>=7.2.1,<9.0.0
+django-redis>=6.0.0,<8.0.0
 celery[redis]>=5.3,<6.0.0
 django-celery-results>=2.6.0
 
@@ -33,7 +33,7 @@ xlrd>=2.0.1
 
 # Images (required by ImageField on User.profile_picture,
 # Course.thumbnail and Organization.logo)
-Pillow>=11.0.0
+Pillow>=11.0.0,<13
 
 # PDF Generation (Certificates)
 xhtml2pdf>=0.2.17
