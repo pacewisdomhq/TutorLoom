@@ -14,7 +14,7 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tuturloom/utils/app_exports.dart';
+import 'package:tutorloom/utils/app_exports.dart';
 
 import 'support/fake_api.dart';
 
@@ -29,7 +29,7 @@ void main() {
     String lastName = 'Rao',
   }) => <String, dynamic>{
     'id': userId,
-    'email': 'student2@tuturloom.local',
+    'email': 'student2@tutorloom.local',
     'first_name': firstName,
     'last_name': lastName,
     'phone_number': '',
@@ -45,7 +45,7 @@ void main() {
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
     dotenv.loadFromString(envString: 'API_BASE_URL=https://api.test.local');
-    tempDir = await Directory.systemTemp.createTemp('tuturloom_profile_fetch_');
+    tempDir = await Directory.systemTemp.createTemp('tutorloom_profile_fetch_');
     Hive.init(tempDir.path);
     for (final String box in HSBox.all) {
       await Hive.openBox<dynamic>(box);
@@ -71,7 +71,7 @@ void main() {
       LoginSuccess(
         user: AppUser(
           id: userId,
-          email: 'student2@tuturloom.local',
+          email: 'student2@tutorloom.local',
           firstName: firstName,
         ),
         accessToken: 'a',
@@ -138,7 +138,7 @@ void main() {
       // instead of spinning.
       final SessionProvider session = await signedIn();
       await session.setUser(
-        const AppUser(id: userId, email: 'student2@tuturloom.local'),
+        const AppUser(id: userId, email: 'student2@tutorloom.local'),
       );
       await HiveStorage.remove(HSKeys.user);
       AuthTokenStore.load();
@@ -171,7 +171,7 @@ void main() {
     await tester.runAsync(() async {
       final SessionProvider session = await signedIn();
       await session.setUser(
-        const AppUser(id: userId, email: 'student2@tuturloom.local'),
+        const AppUser(id: userId, email: 'student2@tutorloom.local'),
       );
       await HiveStorage.remove(HSKeys.user);
       AuthTokenStore.load();

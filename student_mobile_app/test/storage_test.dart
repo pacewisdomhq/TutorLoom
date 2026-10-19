@@ -13,14 +13,14 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tuturloom/utils/app_exports.dart';
+import 'package:tutorloom/utils/app_exports.dart';
 
 void main() {
   late Directory tempDir;
 
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
-    tempDir = await Directory.systemTemp.createTemp('tuturloom_storage_');
+    tempDir = await Directory.systemTemp.createTemp('tutorloom_storage_');
     Hive.init(tempDir.path);
     for (final String box in HSBox.all) {
       await Hive.openBox<dynamic>(box);

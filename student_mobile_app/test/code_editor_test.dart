@@ -11,7 +11,7 @@
 // A numbered editor is therefore uncapped, and the page it sits in scrolls.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tuturloom/utils/app_exports.dart';
+import 'package:tutorloom/utils/app_exports.dart';
 
 void main() {
   /// Pumps one editor in a scrollable page, the way both screens hold it.

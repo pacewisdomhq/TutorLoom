@@ -8,7 +8,7 @@
 // ignores and the ones that arrive null.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tuturloom/utils/app_exports.dart';
+import 'package:tutorloom/utils/app_exports.dart';
 
 void main() {
   Map<String, dynamic> payload({

@@ -10,7 +10,7 @@
 // the track showed. These tests measure the fill rather than trusting it.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tuturloom/utils/app_exports.dart';
+import 'package:tutorloom/utils/app_exports.dart';
 
 void main() {
   const double width = 200;

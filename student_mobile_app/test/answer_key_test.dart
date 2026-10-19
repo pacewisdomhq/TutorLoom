@@ -11,7 +11,7 @@
 // These tests exist to fail loudly if anyone ever adds the field back.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tuturloom/utils/app_exports.dart';
+import 'package:tutorloom/utils/app_exports.dart';
 
 void main() {
   group('quiz options', () {

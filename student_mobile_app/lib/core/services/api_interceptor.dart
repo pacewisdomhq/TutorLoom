@@ -3,7 +3,7 @@
 
 import 'dart:async';
 
-import 'package:tuturloom/utils/app_exports.dart';
+import 'package:tutorloom/utils/app_exports.dart';
 
 /// Attaches headers to every request and transparently recovers from an expired
 /// access token.

@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-  "appName": "Tuturloom",
+  "appName": "TutorLoom",
   "@appName": {
     "description": "The product name. An organization's own name replaces it on branded surfaces at runtime."
   },
@@ -12,16 +12,16 @@
   "@noInternet": {
     "description": "Bar pinned to the bottom of the app while the internet is unreachable. The app is online-only, so this states the fact rather than promising saved data."
   },
-  "signInOverline": "Tuturloom for learners",
+  "signInOverline": "TutorLoom for learners",
   "signInTitle": "Welcome back.\nKeep learning.",
-  "signInFootnote": "This app is for learners. Trainers and admins sign in on the Tuturloom website.",
+  "signInFootnote": "This app is for learners. Trainers and admins sign in on the TutorLoom website.",
   "emailLabel": "Email",
   "emailHint": "you@company.com",
   "@emailHint": {
     "description": "Placeholder shown in the empty email field, so the learner can see the expected format."
   },
   "passwordLabel": "Password",
-  "passwordHint": "Your Tuturloom password",
+  "passwordHint": "Your TutorLoom password",
   "signInCta": "Sign in",
   "forgotPassword": "Forgot password?",
   "emailRequired": "Enter your email.",
@@ -33,7 +33,7 @@
   "forgotPasswordBody": "Enter the email you sign in with and we'll send a link to set a new password.",
   "forgotPasswordCta": "Send reset link",
   "forgotPasswordSentTitle": "Check your email",
-  "forgotPasswordSentBody": "If that email has an account, a link to set a new password is on its way. The link opens on the Tuturloom website.",
+  "forgotPasswordSentBody": "If that email has an account, a link to set a new password is on its way. The link opens on the TutorLoom website.",
   "backToSignIn": "Back to sign in",
   "resetPasswordTitle": "Set a new password",
   "resetPasswordBody": "Choose a password for your account. You'll sign in with it on the next screen.",
@@ -167,7 +167,7 @@
   "openTaskPage": "Open task",
   "viewTaskPage": "View task",
   "kindAssessment": "Assessment",
-  "nodeAssessmentUnavailable": "This assessment cannot be taken in the app. Open it on the Tuturloom website.",
+  "nodeAssessmentUnavailable": "This assessment cannot be taken in the app. Open it on the TutorLoom website.",
   "nothingToOpen": "There is nothing to open in this lesson yet.",
   "startQuiz": "Start quiz",
   "openLink": "Open link",

@@ -10,7 +10,7 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tuturloom/utils/app_exports.dart';
+import 'package:tutorloom/utils/app_exports.dart';
 
 import 'support/fake_api.dart';
 
@@ -228,7 +228,7 @@ void main() {
     setUpAll(() async {
       TestWidgetsFlutterBinding.ensureInitialized();
       dotenv.loadFromString(envString: 'API_BASE_URL=https://api.test.local');
-      tempDir = await Directory.systemTemp.createTemp('tuturloom_brand_');
+      tempDir = await Directory.systemTemp.createTemp('tutorloom_brand_');
       Hive.init(tempDir.path);
       for (final String box in HSBox.all) {
         await Hive.openBox<dynamic>(box);

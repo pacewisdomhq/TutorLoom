@@ -9,7 +9,7 @@
 // learner running large text gets a taller bar rather than a clipped one.
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tuturloom/utils/app_exports.dart';
+import 'package:tutorloom/utils/app_exports.dart';
 
 void main() {
   /// The height of the whole bar at a given text scale.

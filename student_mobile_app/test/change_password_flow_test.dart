@@ -17,8 +17,8 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:tuturloom/config/l10n/app_localizations/app_localizations_en.dart';
-import 'package:tuturloom/utils/app_exports.dart';
+import 'package:tutorloom/config/l10n/app_localizations/app_localizations_en.dart';
+import 'package:tutorloom/utils/app_exports.dart';
 
 import 'support/fake_api.dart';
 
@@ -34,7 +34,7 @@ void main() {
     // Polls on a real timer that would outlive the tree.
     InternetProvider.pollingEnabled = false;
 
-    tempDir = await Directory.systemTemp.createTemp('tuturloom_change_pw_');
+    tempDir = await Directory.systemTemp.createTemp('tutorloom_change_pw_');
     Hive.init(tempDir.path);
     for (final String box in HSBox.all) {
       await Hive.openBox<dynamic>(box);

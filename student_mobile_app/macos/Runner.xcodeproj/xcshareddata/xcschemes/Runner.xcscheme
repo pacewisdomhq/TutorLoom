@@ -20,7 +20,7 @@ SPDX-License-Identifier: Apache-2.0
                   <BuildableReference
                      BuildableIdentifier = "primary"
                      BlueprintIdentifier = "33CC10EC2044A3C60003C045"
-                     BuildableName = "Tuturloom.app"
+                     BuildableName = "TutorLoom.app"
                      BlueprintName = "Runner"
                      ReferencedContainer = "container:Runner.xcodeproj">
                   </BuildableReference>
@@ -38,7 +38,7 @@ SPDX-License-Identifier: Apache-2.0
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "33CC10EC2044A3C60003C045"
-               BuildableName = "Tuturloom.app"
+               BuildableName = "TutorLoom.app"
                BlueprintName = "Runner"
                ReferencedContainer = "container:Runner.xcodeproj">
             </BuildableReference>
@@ -54,7 +54,7 @@ SPDX-License-Identifier: Apache-2.0
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "33CC10EC2044A3C60003C045"
-            BuildableName = "Tuturloom.app"
+            BuildableName = "TutorLoom.app"
             BlueprintName = "Runner"
             ReferencedContainer = "container:Runner.xcodeproj">
          </BuildableReference>
@@ -89,7 +89,7 @@ SPDX-License-Identifier: Apache-2.0
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "33CC10EC2044A3C60003C045"
-            BuildableName = "Tuturloom.app"
+            BuildableName = "TutorLoom.app"
             BlueprintName = "Runner"
             ReferencedContainer = "container:Runner.xcodeproj">
          </BuildableReference>
@@ -106,7 +106,7 @@ SPDX-License-Identifier: Apache-2.0
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "33CC10EC2044A3C60003C045"
-            BuildableName = "Tuturloom.app"
+            BuildableName = "TutorLoom.app"
             BlueprintName = "Runner"
             ReferencedContainer = "container:Runner.xcodeproj">
          </BuildableReference>

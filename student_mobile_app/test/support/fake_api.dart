@@ -3,7 +3,7 @@
 
 import 'dart:convert';
 
-import 'package:tuturloom/utils/app_exports.dart';
+import 'package:tutorloom/utils/app_exports.dart';
 
 /// A canned HTTP layer for [DioClient].
 ///
