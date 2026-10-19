@@ -106,10 +106,12 @@ class _Result extends StatelessWidget {
                 children: staggered(<Widget>[
                   const SizedBox(height: AppSpace.md),
                   Center(
-                    child: ScoreRing(
+                    child: LearningRing(
                       value: outcome.score / 100,
+                      size: 190,
+                      stroke: 16,
                       color: tone,
-                      child: Column(
+                      center: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           Text(

@@ -225,12 +225,12 @@ class _CardBody extends StatelessWidget {
                 width: 44,
                 height: 44,
                 decoration: BoxDecoration(
-                  color: brand.successContainer,
+                  color: brand.brandSoft,
                   borderRadius: BorderRadius.circular(AppRadius.tile),
                 ),
                 child: Icon(
                   Icons.workspace_premium_rounded,
-                  color: brand.success,
+                  color: brand.brandText,
                 ),
               ),
               const SizedBox(width: AppSpace.md),

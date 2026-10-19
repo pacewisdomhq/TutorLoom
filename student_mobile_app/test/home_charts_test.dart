@@ -60,6 +60,12 @@ void main() {
           ),
         ),
       );
+      // Settled, not just pumped. `MaterialApp` animates a theme change
+      // through `AnimatedTheme`, and `BrandColors` is a `ThemeExtension` with
+      // a `lerp` — so a second `pumpWidget` in one test renders frame 0 of
+      // that transition, which still holds the *previous* brand. Reading
+      // there silently compared a theme with itself.
+      await tester.pumpAndSettle();
       return colors;
     }
 
@@ -87,17 +93,25 @@ void main() {
       expect(c.toSet(), hasLength(3));
     });
 
-    testWidgets('a blue brand does not colour the donut', (
-      WidgetTester tester,
-    ) async {
-      // The whole point of not deriving these from the brand: an org that
-      // brands the app blue must not end up with a blue status scale.
+    testWidgets('an org brand colours the donut', (WidgetTester tester) async {
+      // It used to be fixed green so that no hex could collapse the scale.
+      // Deriving the three from one fill at separate weights cannot collapse,
+      // so the donut follows the brand like the rest of the dashboard.
       final List<Color> plain = await read(tester, AppTheme.light());
       final List<Color> blue = await read(
         tester,
         AppTheme.light(AppBrand.fromOrg('#1D4ED8', '#3B82F6')),
       );
-      expect(blue, plain);
+
+      expect(blue, isNot(plain));
+      expect(blue.toSet(), hasLength(3), reason: 'and stays legible');
+    });
+
+    testWidgets('the default brand donut is the product primary', (
+      WidgetTester tester,
+    ) async {
+      final List<Color> c = await read(tester, AppTheme.light());
+      expect(c.first, AppBrand.fallback.fillFor(Brightness.light));
     });
 
     testWidgets('in-progress reads between completed and not-started', (

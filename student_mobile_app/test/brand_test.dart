@@ -166,15 +166,29 @@ void main() {
   });
 
   group('rings', () {
-    test('the XP ring stays amber whatever the org brand', () {
-      final AppBrand branded = AppBrand.fromOrg('#0F766E', '#14B8A6');
-      expect(branded.ring3(), AppBrand.fallback.ring3());
-    });
-
     test('a branded org derives its rings from its own pair', () {
       final AppBrand branded = AppBrand.fromOrg('#0F766E', '#14B8A6');
       expect(branded.ring1().first, const Color(0xFF0F766E));
       expect(branded.ring1(), isNot(AppBrand.fallback.ring1()));
+    });
+
+    test('the default brand shades its own primary, not a fixed pair', () {
+      // It was a hardcoded green-to-cyan, which made the product's own brand
+      // the only one whose progress bars ignored its primary colour.
+      final List<Color> ring = AppBrand.fallback.ring1();
+
+      expect(ring.first, AppPalette.seedPrimary);
+      expect(
+        ring.last,
+        Color.lerp(AppPalette.seedPrimary, AppPalette.white, 0.35),
+      );
+      // Same hue at two weights, so a progress bar reads as one colour.
+      expect(ring.last.g - ring.last.b, lessThan(0), reason: 'still blue');
+      expect(
+        ring.last.computeLuminance(),
+        greaterThan(ring.first.computeLuminance()),
+        reason: 'the far end is the lighter one',
+      );
     });
   });
 

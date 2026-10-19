@@ -23,8 +23,6 @@ class BrandColors extends ThemeExtension<BrandColors> {
     required this.brandText,
     required this.brandSoft,
     required this.ring1,
-    required this.ring2,
-    required this.ring3,
     required this.codeBackground,
   });
 
@@ -42,12 +40,13 @@ class BrandColors extends ThemeExtension<BrandColors> {
   final Color brandSoft;
   final Color codeBackground;
 
-  /// Gradients for the learning rings, outermost first. Two are in use —
-  /// course and overall completion; [ring3] is the widget's spare slot and
-  /// currently only tints the profile header.
+  /// The brand gradient: progress bars, the home gauge, and the seed for
+  /// generated course-card art.
+  ///
+  /// Named for the concentric rings it was drawn for. Those are one solid ring
+  /// now — see [LearningRing] — so nothing here paints a ring any more, and
+  /// the two further gradients that once sat beside it are gone.
   final List<Color> ring1;
-  final List<Color> ring2;
-  final List<Color> ring3;
 
   @override
   BrandColors copyWith({
@@ -69,8 +68,6 @@ class BrandColors extends ThemeExtension<BrandColors> {
     brandText: brandText ?? this.brandText,
     brandSoft: brandSoft ?? this.brandSoft,
     ring1: ring1,
-    ring2: ring2,
-    ring3: ring3,
     codeBackground: codeBackground,
   );
 
@@ -95,8 +92,6 @@ class BrandColors extends ThemeExtension<BrandColors> {
       brandText: l(brandText, other.brandText),
       brandSoft: l(brandSoft, other.brandSoft),
       ring1: ll(ring1, other.ring1),
-      ring2: ll(ring2, other.ring2),
-      ring3: ll(ring3, other.ring3),
       codeBackground: l(codeBackground, other.codeBackground),
     );
   }

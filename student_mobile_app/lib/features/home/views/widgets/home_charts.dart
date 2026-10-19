@@ -103,21 +103,29 @@ class _GaugePainter extends CustomPainter {
       old.value != value || old.track != track || old.gradient != gradient;
 }
 
-/// The colours of the course-status donut: one green at two weights, over the
+/// The colours of the course-status donut: the brand at two weights, over the
 /// flat track.
 ///
-/// **Deliberately not brand-derived.** These were originally the two ends of
-/// `brand.ring1`, which is `[primary, lerp(primary, accent, 0.45)]` for a
-/// branded organization — two points on one short gradient, so "completed" and
-/// "in progress" came out nearly the same colour, and *exactly* the same
-/// colour for an org that sets a primary but no accent, because `accent` falls
-/// back to `primary`. A status scale has to stay legible whatever hex an admin
-/// picks, so it uses `success` the way `ring3` stays amber.
+/// **Weights of one colour, not two ends of a gradient.** These were
+/// originally `brand.ring1`'s two stops, and that collapsed: for an org that
+/// sets a primary but no accent the accent *is* the primary, so "completed"
+/// and "in progress" came out the identical colour. Deriving all three from
+/// the one fill at separate weights cannot collapse that way — whatever hex an
+/// admin picks, the three steps keep their spacing.
+///
+/// They were green for a while to dodge that collapse, which left the donut as
+/// the one card on the dashboard that ignored the brand.
 abstract final class CourseStatusColors {
-  /// Full-strength green, brightness-aware so it holds up in dark mode.
-  static Color completed(BuildContext context) => context.brand.success;
+  /// The brand tone, corrected to read *against* the surface.
+  ///
+  /// `brandText`, not `brandFill`: the fill is deepened so white text sits on
+  /// top of it, which on the dark surface leaves it too dark to head a
+  /// three-step scale — completed and in-progress came within 0.086 relative
+  /// luminance of each other. Nothing is printed on a wedge, so the tone that
+  /// is corrected for legibility against the background is the right one.
+  static Color completed(BuildContext context) => context.brand.brandText;
 
-  /// The same green at part strength.
+  /// The same fill at part strength.
   ///
   /// Blended into the surface rather than drawn with an alpha, so the wedge
   /// and its 10px legend dot are the same colour no matter what ends up behind
@@ -131,7 +139,7 @@ abstract final class CourseStatusColors {
     final bool isDark = context.theme.brightness == Brightness.dark;
     return Color.lerp(
       context.colors.surface,
-      context.brand.success,
+      context.brand.brandText,
       isDark ? 0.55 : 0.45,
     )!;
   }

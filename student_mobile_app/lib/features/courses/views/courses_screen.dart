@@ -347,14 +347,13 @@ class _GeneratedArt extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final BrandColors brand = context.brand;
-    final List<Color> palette = <Color>[
-      brand.ring1.first,
-      brand.ring1.last,
-      brand.ring2.first,
-      brand.ring2.last,
-      brand.brandFill,
-    ];
+    // The two ends of the brand gradient, so a wall of cards still varies
+    // while every tile stays on the brand. It used to seed from five colours,
+    // three of which came from a second gradient and the brand fill — but the
+    // fill is `ring1.first` for most brands, so two of the five were the same
+    // tile, and the second gradient was the only thing in the app still
+    // pulling in a non-brand hue.
+    final List<Color> palette = context.brand.ring1;
     final Color seed = palette[course.id.abs() % palette.length];
 
     return DecoratedBox(

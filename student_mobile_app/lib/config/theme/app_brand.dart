@@ -76,19 +76,16 @@ class AppBrand {
       ? ensureContrast(primary, AppPalette.lSurface, 4.5)
       : ensureContrast(primary, AppPalette.dSurface, 4.5);
 
+  /// The progress gradient: completion rings, progress bars, the home gauge.
+  ///
+  /// The default brand shades its **own primary** rather than reaching for a
+  /// fixed pair. It used to be a hardcoded green-to-cyan, which meant the one
+  /// brand the product ships with was the only one whose progress bars ignored
+  /// its primary colour — every org that set a hex got a gradient built from
+  /// it, and the product's own did not.
   List<Color> ring1() => usesDefaultRings
-      ? const <Color>[AppPalette.ringGreen, AppPalette.ringCyan]
+      ? <Color>[primary, Color.lerp(primary, AppPalette.white, 0.35)!]
       : <Color>[primary, Color.lerp(primary, accent, 0.45)!];
-
-  List<Color> ring2() => usesDefaultRings
-      ? const <Color>[AppPalette.ringBlue, AppPalette.ringPink]
-      : <Color>[accent, Color.lerp(accent, AppPalette.white, 0.25)!];
-
-  /// The spare ring, amber regardless of branding.
-  List<Color> ring3() => const <Color>[
-    AppPalette.ringAmber,
-    AppPalette.ringOrange,
-  ];
 
   @override
   bool operator ==(Object other) =>

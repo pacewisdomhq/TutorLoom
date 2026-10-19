@@ -2,208 +2,52 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import 'dart:math' as math;
-import 'dart:ui' as ui;
 
 import 'package:tuturloom/utils/app_exports.dart';
 
-/// The concentric learning rings from the design.
+/// The completion ring from the design: one arc over a flat track.
 ///
-/// Gradient arcs drawn outside-in with a 4px gap — one per value, at most
-/// three. They animate on a `ringDraw` curve, staggered by `ringStagger`, and
-/// under reduced motion they appear at their final value with no sweep.
-class LearningRings extends StatefulWidget {
-  const LearningRings({
-    super.key,
-    required this.values,
-    this.size = 136,
-    this.stroke = 14,
-    this.gap = 4,
-    this.center,
-  });
-
-  /// 0..1 per ring, outermost first. At most three.
-  final List<double> values;
-  final double size;
-  final double stroke;
-  final double gap;
-  final Widget? center;
-
-  @override
-  State<LearningRings> createState() => _LearningRingsState();
-}
-
-class _LearningRingsState extends State<LearningRings>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller = AnimationController(
-    vsync: this,
-    // The longest ring plus its stagger.
-    duration: AppMotion.ringDraw + AppMotion.ringStagger * 2,
-  );
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      if (context.reduceMotion) {
-        _controller.value = 1;
-      } else {
-        _controller.forward();
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final BrandColors brand = context.brand;
-    final List<List<Color>> gradients = <List<Color>>[
-      brand.ring1,
-      brand.ring2,
-      brand.ring3,
-    ];
-
-    return SizedBox(
-      width: widget.size,
-      height: widget.size,
-      child: AnimatedBuilder(
-        animation: _controller,
-        builder: (BuildContext context, Widget? child) => CustomPaint(
-          painter: _RingsPainter(
-            values: widget.values,
-            gradients: gradients,
-            track: brand.track,
-            stroke: widget.stroke,
-            gap: widget.gap,
-            progress: _controller.value,
-            totalMs: (AppMotion.ringDraw + AppMotion.ringStagger * 2)
-                .inMilliseconds
-                .toDouble(),
-            drawMs: AppMotion.ringDraw.inMilliseconds.toDouble(),
-            staggerMs: AppMotion.ringStagger.inMilliseconds.toDouble(),
-          ),
-          child: child,
-        ),
-        child: widget.center == null ? null : Center(child: widget.center),
-      ),
-    );
-  }
-}
-
-class _RingsPainter extends CustomPainter {
-  _RingsPainter({
-    required this.values,
-    required this.gradients,
-    required this.track,
-    required this.stroke,
-    required this.gap,
-    required this.progress,
-    required this.totalMs,
-    required this.drawMs,
-    required this.staggerMs,
-  });
-
-  final List<double> values;
-  final List<List<Color>> gradients;
-  final Color track;
-  final double stroke;
-  final double gap;
-  final double progress;
-  final double totalMs;
-  final double drawMs;
-  final double staggerMs;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final Offset center = Offset(size.width / 2, size.height / 2);
-
-    for (int i = 0; i < values.length && i < gradients.length; i++) {
-      final double radius =
-          (size.width / 2) - (stroke / 2) - (i * (stroke + gap));
-      if (radius <= 0) continue;
-
-      final Rect rect = Rect.fromCircle(center: center, radius: radius);
-
-      canvas.drawCircle(
-        center,
-        radius,
-        Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = stroke
-          ..color = track,
-      );
-
-      // Each ring starts `staggerMs` after the one outside it.
-      final double start = (i * staggerMs) / totalMs;
-      final double end = ((i * staggerMs) + drawMs) / totalMs;
-      final double local = progress <= start
-          ? 0
-          : progress >= end
-          ? 1
-          : (progress - start) / (end - start);
-      final double eased = AppMotion.ring.transform(local.clamp(0.0, 1.0));
-      final double sweep = 2 * math.pi * values[i].clamp(0.0, 1.0) * eased;
-      if (sweep <= 0) continue;
-
-      canvas.drawArc(
-        rect,
-        -math.pi / 2,
-        sweep,
-        false,
-        Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = stroke
-          ..strokeCap = StrokeCap.round
-          ..shader = ui.Gradient.sweep(
-            center,
-            gradients[i],
-            <double>[0, 1],
-            TileMode.clamp,
-            -math.pi / 2,
-            (3 * math.pi) / 2,
-          ),
-      );
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant _RingsPainter old) =>
-      old.progress != progress || old.values != values || old.track != track;
-}
-
-/// A single large ring with a score in the middle, for quiz
-/// results.
-class ScoreRing extends StatelessWidget {
-  const ScoreRing({
+/// **One ring, one colour.** It drew up to three concentric rings on sweep
+/// gradients, which is where the green came from — and both call sites, the
+/// roadmap header and Progress, only ever passed a single value. So the
+/// stagger machinery animated a stagger of one, and two of the three gradients
+/// were never drawn. A percentage reads as the brand colour against the empty
+/// track, which is the whole of what either screen is saying.
+///
+/// This also absorbs what was `ScoreRing`: the quiz result drew the same
+/// circle with a pass/fail tint, through a second widget and a second painter.
+/// It passes that tint as [color].
+class LearningRing extends StatelessWidget {
+  const LearningRing({
     super.key,
     required this.value,
-    required this.child,
-    this.size = 190,
-    this.stroke = 16,
+    this.size = 136,
+    this.stroke = 14,
+    this.center,
     this.color,
   });
 
+  /// 0..1. Anything outside that is clamped rather than wrapped around.
   final double value;
-  final Widget child;
+
   final double size;
   final double stroke;
+
+  /// Sits in the hole. Null draws the ring alone.
+  final Widget? center;
+
+  /// Overrides the brand fill — the quiz result tints it by pass or fail.
   final Color? color;
 
   @override
   Widget build(BuildContext context) {
     final BrandColors brand = context.brand;
-    final Color ring = color ?? brand.brandFill;
 
     return TweenAnimationBuilder<double>(
       tween: Tween<double>(begin: 0, end: value.clamp(0.0, 1.0)),
       duration: context.reduceMotion ? Duration.zero : AppMotion.ringDraw,
       curve: AppMotion.ring,
-      builder: (BuildContext context, double t, Widget? c) => SizedBox(
+      builder: (BuildContext context, double drawn, Widget? child) => SizedBox(
         width: size,
         height: size,
         child: Stack(
@@ -211,24 +55,24 @@ class ScoreRing extends StatelessWidget {
           children: <Widget>[
             CustomPaint(
               size: Size.square(size),
-              painter: _ScorePainter(
-                value: t,
-                color: ring,
+              painter: _RingPainter(
+                value: drawn,
+                color: color ?? brand.brandFill,
                 track: brand.track,
                 stroke: stroke,
               ),
             ),
-            c!,
+            ?child,
           ],
         ),
       ),
-      child: child,
+      child: center,
     );
   }
 }
 
-class _ScorePainter extends CustomPainter {
-  _ScorePainter({
+class _RingPainter extends CustomPainter {
+  _RingPainter({
     required this.value,
     required this.color,
     required this.track,
@@ -244,6 +88,7 @@ class _ScorePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final Offset center = Offset(size.width / 2, size.height / 2);
     final double radius = (size.width / 2) - (stroke / 2);
+    if (radius <= 0) return;
 
     canvas.drawCircle(
       center,
@@ -254,6 +99,7 @@ class _ScorePainter extends CustomPainter {
         ..color = track,
     );
 
+    if (value <= 0) return;
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
       -math.pi / 2,
@@ -268,8 +114,8 @@ class _ScorePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _ScorePainter old) =>
-      old.value != value || old.color != color;
+  bool shouldRepaint(covariant _RingPainter old) =>
+      old.value != value || old.color != color || old.track != track;
 }
 
 /// `.bar`: an 8px track with a gradient fill that grows from the left.

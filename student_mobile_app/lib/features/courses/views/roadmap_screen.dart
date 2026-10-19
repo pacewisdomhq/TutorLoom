@@ -207,9 +207,9 @@ class _CourseHeader extends StatelessWidget {
         const SizedBox(width: AppSpace.md),
         Expanded(
           flex: 2,
-          child: LearningRings(
+          child: LearningRing(
             stroke: 9,
-            values: <double>[course.completionPercentage / 100],
+            value: course.completionPercentage / 100,
             center: Text(
               '${course.completionPercentage.round()}%',
               style: tabular(

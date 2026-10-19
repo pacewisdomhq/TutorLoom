@@ -87,10 +87,10 @@ class _OverallCard extends StatelessWidget {
       padding: const EdgeInsets.only(top: AppSpace.lg),
       child: Row(
         children: <Widget>[
-          LearningRings(
+          LearningRing(
             size: 118,
             stroke: 11,
-            values: <double>[summary.overallCompletionPercentage / 100],
+            value: summary.overallCompletionPercentage / 100,
             center: Text(
               '${summary.overallCompletionPercentage.round()}%',
               style: tabular(

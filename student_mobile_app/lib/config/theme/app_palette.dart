@@ -17,14 +17,6 @@ abstract final class AppPalette {
   static const Color ink = Color(0xFF0D1B2A);
   static const Color white = Color(0xFFFFFFFF);
 
-  // Default ring gradients, used when an org sets no brand colours.
-  static const Color ringGreen = Color(0xFF74C05F);
-  static const Color ringCyan = Color(0xFF35BAD3);
-  static const Color ringPink = Color(0xFFE0517D);
-  static const Color ringBlue = Color(0xFF3299DB);
-  static const Color ringOrange = Color(0xFFE38535);
-  static const Color ringAmber = Color(0xFFF9C93F);
-
   // Light
   static const Color lBackground = Color(0xFFF5F9FD);
   static const Color lSurface = Color(0xFFFFFFFF);

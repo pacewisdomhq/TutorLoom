@@ -169,8 +169,6 @@ abstract final class AppTheme {
           brandText: brandText,
           brandSoft: brandSoft,
           ring1: brand.ring1(),
-          ring2: brand.ring2(),
-          ring3: brand.ring3(),
           codeBackground: AppPalette.codeBackground,
         ),
       ],
