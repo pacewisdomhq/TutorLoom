@@ -1,7 +1,7 @@
 {
   "name": "lms-open-source-frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "license": "Apache-2.0",
   "description": "React frontend for the open-source multi-tenant Learning Management System.",
   "type": "module",

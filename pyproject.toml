@@ -3,7 +3,7 @@
 
 [tool.poetry]
 name = "lms-open-source"
-version = "0.1.0"
+version = "1.0.0"
 description = "Multi-tenant Learning Management System with a Django REST Framework backend and a React frontend."
 authors = ["Open Source Contributors"]
 license = "Apache-2.0"
