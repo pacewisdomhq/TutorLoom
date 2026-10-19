@@ -42,4 +42,4 @@ xhtml2pdf>=0.2.17
 requests>=2.33.1
 
 # Celery Monitoring
-flower>=2.0.0
+flower>=2.2.0
