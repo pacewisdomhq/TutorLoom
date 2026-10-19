@@ -2,12 +2,13 @@
 
 ## Supported versions
 
-The project is in early development. Security fixes are made on the `main` branch and included in the next release.
+Security fixes are made on the `main` branch and released as a patch to the latest minor version.
 
 | Version | Supported |
 |---|---|
 | `main` (latest) | ✅ |
-| 0.1.x | ✅ |
+| 1.0.x | ✅ |
+| < 1.0 | ❌ |
 
 ## Reporting a vulnerability
 

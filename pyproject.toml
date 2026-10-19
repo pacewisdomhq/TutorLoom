@@ -3,24 +3,24 @@
 
 [tool.poetry]
 name = "lms-open-source"
-version = "0.1.0"
+version = "1.0.0"
 description = "Multi-tenant Learning Management System with a Django REST Framework backend and a React frontend."
 authors = ["Open Source Contributors"]
 license = "Apache-2.0"
 package-mode = false
 
 [tool.poetry.dependencies]
-python = ">=3.13,<3.14"
+python = ">=3.13,<3.15"
 django = ">=6.0.2,<7.0.0"
 djangorestframework = ">=3.16.1,<4.0.0"
 djangorestframework-simplejwt = ">=5.5.1,<6.0.0"
-drf-spectacular = ">=0.29.0,<0.30.0"
+drf-spectacular = ">=0.29.0,<0.31.0"
 psycopg2-binary = ">=2.9.11,<3.0.0"
-django-environ = ">=0.13.0,<0.14.0"
+django-environ = ">=0.13.0,<0.15.0"
 pyjwt = ">=2.11.0,<3.0.0"
 django-cors-headers = ">=4.9.0,<5.0.0"
-redis = ">=7.2.1,<8.0.0"
-django-redis = ">=6.0.0,<7.0.0"
+redis = ">=7.2.1,<9.0.0"
+django-redis = ">=6.0.0,<8.0.0"
 celery = ">=5.6.2,<6.0.0"
 pandas = "^3.0.1"
 openpyxl = "^3.1.5"
@@ -30,7 +30,7 @@ boto3 = "^1.42.90"
 requests = "^2.33.1"
 gunicorn = ">=21.0"
 django-celery-results = "^2.6.0"
-pillow = "^11.0.0"
+pillow = ">=11,<13"
 xhtml2pdf = ">=0.2.23"
 
 [tool.poetry.group.dev.dependencies]

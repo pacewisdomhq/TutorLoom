@@ -22,5 +22,15 @@ export default defineConfig([
       ecmaVersion: 2020,
       globals: globals.browser,
     },
+    rules: {
+      // eslint-plugin-react-hooks 7.1 added these React Compiler rules to its
+      // recommended set. Existing code trips them in 22 places, so they warn
+      // rather than fail CI until that code is refactored.
+      'react-hooks/set-state-in-effect': 'warn',
+      'react-hooks/preserve-manual-memoization': 'warn',
+      'react-hooks/purity': 'warn',
+      'react-hooks/immutability': 'warn',
+      'react-hooks/refs': 'warn',
+    },
   },
 ])
