@@ -19,7 +19,7 @@
     "@dnd-kit/utilities": "^3.2.2",
     "html2canvas": "^1.4.1",
     "jspdf": "^4.2.1",
-    "lucide-react": "^0.575.0",
+    "lucide-react": "^1.59.0",
     "prismjs": "^1.30.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
