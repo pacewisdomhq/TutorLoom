@@ -466,6 +466,10 @@ docker run -d -p 8000:8000 --env-file .env tutorloom-backend
 - Run a Celery worker next to the web process. Schedule `analytics.tasks.calculate_daily_analytics` yourself; no beat schedule ships with the project.
 - The web frontend is a static Vite build (`npm run build` in `frontend/`) that you deploy separately.
 
+## ☁️ One-Click Deploy
+
+[![Deploy on RepoCloud](https://d16t0pc4846x52.cloudfront.net/deploylobe.svg)](https://repocloud.io/details/TutorLoom/)
+
 ---
 
 ## 🧭 Roadmap
