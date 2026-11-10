@@ -33,7 +33,7 @@ xlrd>=2.0.1
 
 # Images (required by ImageField on User.profile_picture,
 # Course.thumbnail and Organization.logo)
-Pillow>=11.0.0,<13
+Pillow>=11.0.0,<14
 
 # PDF Generation (Certificates)
 xhtml2pdf>=0.2.17

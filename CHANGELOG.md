@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Changed
+
+- Dependency updates: Pillow 13, lucide-react 1, @testing-library/jest-dom 7, React 19.3.1, Vite 7.3, Vitest 5.1 and other minor and patch updates.
+
 ## [1.0.2] - 2026-11-10
 
 ### Security
