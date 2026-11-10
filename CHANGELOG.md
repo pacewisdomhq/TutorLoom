@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-11-10
+
+### Security
+
+- Removed the task grade endpoint (`/api/submissions/<id>/grade/`), which let any signed-in user read and grade task submissions. Teachers review task submissions through the organisation-scoped review endpoint.
+
 ## [1.0.1] - 2026-11-10
 
 ### Security
@@ -53,6 +59,7 @@ First stable release of TutorLoom, the open-source learning management system.
 
 - Rate limiting on the login, password reset, and invite endpoints.
 
-[Unreleased]: https://github.com/pacewisdomhq/TutorLoom/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/pacewisdomhq/TutorLoom/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/pacewisdomhq/TutorLoom/releases/tag/v1.0.2
 [1.0.1]: https://github.com/pacewisdomhq/TutorLoom/releases/tag/v1.0.1
 [1.0.0]: https://github.com/pacewisdomhq/TutorLoom/releases/tag/v1.0.0
