@@ -214,6 +214,14 @@ def test_assignment_submission_attempts_and_evaluation():
     from rbac.models import Role
     student_role, _ = Role.objects.get_or_create(name='student')
     member = OrganizationMember.objects.create(user=user, organization=org, role=student_role)
+    from organizations.models import Batch, BatchStudent
+    batch = Batch.objects.create(
+        organization=org,
+        name='Active Batch',
+        start_date=date.today() - timedelta(days=1),
+        end_date=date.today() + timedelta(days=30),
+    )
+    BatchStudent.objects.create(batch=batch, student=user, course=course)
 
     # create one submission to reach max attempts
     AssignmentSubmission.objects.create(assessment=assessment, student=member, payload={}, status='Pending')
@@ -342,6 +350,14 @@ def test_assignment_submission_celery_import_error():
     from rbac.models import Role
     student_role, _ = Role.objects.get_or_create(name='student')
     OrganizationMember.objects.get_or_create(user=user, organization=org, defaults={'role': student_role, 'is_active': True})
+    from organizations.models import Batch, BatchStudent
+    batch = Batch.objects.create(
+        organization=org,
+        name='Active Batch',
+        start_date=date.today() - timedelta(days=1),
+        end_date=date.today() + timedelta(days=30),
+    )
+    BatchStudent.objects.create(batch=batch, student=user, course=course)
 
     post_req = factory.post('/', data=json.dumps({'payload': {}}), content_type='application/json')
     force_authenticate(post_req, user=user)  # <-- FIX
