@@ -127,7 +127,10 @@ click = ">=8.3.1,<9.0"
 click-didyoumean = ">=0.3.1"
 click-plugins = ">=1.1.1.2"
 click-repl = ">=0.4.1"
-kombu = ">=5.7.0"
+kombu = [
+    {version = ">=5.7.0"},
+    {version = "*", extras = ["redis"], optional = true, markers = "extra == \"redis\""},
+]
 python-dateutil = "2.9.0.post0"
 tzlocal = "*"
 vine = ">=5.1.0,<6.0"
@@ -876,6 +879,8 @@ files = [
 
 [package.dependencies]
 amqp = ">=5.4.2"
+packaging = {version = "26.3", optional = true, markers = "extra == \"redis\""}
+redis = {version = ">=6.4.0,<9.0.0", optional = true, markers = "extra == \"redis\""}
 tzdata = {version = ">=2026.2", markers = "sys_platform == \"win32\""}
 vine = "5.1.0"
 
@@ -1189,14 +1194,14 @@ et-xmlfile = "*"
 
 [[package]]
 name = "packaging"
-version = "26.0"
+version = "26.3"
 description = "Core utilities for Python packages"
 optional = false
-python-versions = ">=3.8"
-groups = ["dev"]
+python-versions = ">=3.9"
+groups = ["main", "dev"]
 files = [
-    {file = "packaging-26.0-py3-none-any.whl", hash = "sha256:b36f1fef9334a5588b4166f8bcd26a14e521f2b55e6b9de3aaa80d3ff7a37529"},
-    {file = "packaging-26.0.tar.gz", hash = "sha256:00243ae351a257117b6a241061796684b084ed1c516a08c48a3f7e147a9d80b4"},
+    {file = "packaging-26.3-py3-none-any.whl", hash = "sha256:d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c"},
+    {file = "packaging-26.3.tar.gz", hash = "sha256:94edc256424af38762eb31306eed28beb9f0efc50a8837492c9d6fd6004aed79"},
 ]
 
 [[package]]
@@ -2028,25 +2033,12 @@ files = [
 
 [[package]]
 name = "tzdata"
-version = "2025.3"
-description = "Provider of IANA time zone data"
-optional = false
-python-versions = ">=2"
-groups = ["main"]
-markers = "sys_platform != \"win32\" and sys_platform != \"emscripten\" and platform_system == \"Windows\""
-files = [
-    {file = "tzdata-2025.3-py2.py3-none-any.whl", hash = "sha256:06a47e5700f3081aab02b2e513160914ff0694bce9947d6b76ebd6bf57cfc5d1"},
-    {file = "tzdata-2025.3.tar.gz", hash = "sha256:de39c2ca5dc7b0344f2eba86f49d614019d29f060fc4ebc8a417896a620b56a7"},
-]
-
-[[package]]
-name = "tzdata"
 version = "2026.6"
 description = "Provider of IANA time zone data"
 optional = false
 python-versions = ">=2"
 groups = ["main"]
-markers = "sys_platform == \"win32\" or sys_platform == \"emscripten\""
+markers = "sys_platform == \"win32\" or sys_platform == \"emscripten\" or platform_system == \"Windows\""
 files = [
     {file = "tzdata-2026.6-py2.py3-none-any.whl", hash = "sha256:0a10eec6e13ef16b627fabed9a5f2ba61a62b1c67f327305f4e7e412a70b4aec"},
     {file = "tzdata-2026.6.tar.gz", hash = "sha256:85d2cd9c09f81f0bb29db27759fc83af4f1e620efb814f8c5bf8b4cc4feece6d"},
@@ -2191,4 +2183,4 @@ test = ["pytest", "pytest-cov"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13,<3.15"
-content-hash = "bb3e33ddbac96b1bc9b4833093a84d967a8f4dbb8fbe146a8b9e587b747f8f0f"
+content-hash = "fccf6b5e5ad0fc3ac87f57fdd9ce383e1e52020e558ac119d7ae7b358ebf0604"

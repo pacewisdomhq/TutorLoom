@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Fixed
+
+- `pyproject.toml` now asks for celery with its redis extra, as `requirements.txt` does, so `poetry install --only main` installs everything the Redis broker needs.
+
 ## [1.0.3] - 2026-11-10
 
 ### Security
