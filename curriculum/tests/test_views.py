@@ -210,8 +210,13 @@ def test_assignment_submission_attempts_and_evaluation():
     node = Node.objects.create(module=module, title='N2')
     assessment = Assessment.objects.create(node=node, assignment_type='MCQ', prompt='Q', max_attempts=1, passing_score_percentage=50)
 
+    from organizations.models import OrganizationMember
+    from rbac.models import Role
+    student_role, _ = Role.objects.get_or_create(name='student')
+    member = OrganizationMember.objects.create(user=user, organization=org, role=student_role)
+
     # create one submission to reach max attempts
-    AssignmentSubmission.objects.create(assessment=assessment, student=user, payload={}, status='Pending')
+    AssignmentSubmission.objects.create(assessment=assessment, student=member, payload={}, status='Pending')
 
     post_req = factory.post('/', data=json.dumps({'payload': {}}), content_type='application/json')
     post_req.user = user
@@ -223,6 +228,7 @@ def test_assignment_submission_attempts_and_evaluation():
     view.kwargs = {'node_id': node.id}
     resp = view.post(request, node.id)
     assert resp.status_code == 403
+    assert resp.data['detail'] == 'Max attempts reached.'
 
 
 @pytest.mark.django_db
@@ -360,6 +366,10 @@ def test_assignment_submission_celery_import_error():
     module, _ = Module.objects.get_or_create(course=course, title='Mod')
     node, _ = Node.objects.get_or_create(module=module, title='N')
     Assessment.objects.get_or_create(node=node, assignment_type='MCQ', prompt='Q', max_attempts=5)
+    from organizations.models import OrganizationMember
+    from rbac.models import Role
+    student_role, _ = Role.objects.get_or_create(name='student')
+    OrganizationMember.objects.get_or_create(user=user, organization=org, defaults={'role': student_role, 'is_active': True})
 
     post_req = factory.post('/', data=json.dumps({'payload': {}}), content_type='application/json')
     force_authenticate(post_req, user=user)  # <-- FIX

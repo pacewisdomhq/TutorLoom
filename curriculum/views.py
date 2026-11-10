@@ -55,6 +55,7 @@ MISSING_FILE_ERROR = 'Missing file.'
 FILE_HAS_ERRORS_MESSAGE = 'File has errors. Please correct and reupload.'
 PERMISSION_DENIED_MESSAGE = 'Permission denied.'
 COURSE_ID_REQUIRED_MESSAGE = 'course_id query parameter is required.'
+MSG_ONLY_LEARNERS_SUBMIT = 'Only learners of this organisation can submit.'
 
 
 def _user_is_org_staff(user, org_id):
@@ -62,6 +63,13 @@ def _user_is_org_staff(user, org_id):
         user=user, organization_id=org_id,
         role__name__in=['org_admin', 'teacher'], is_active=True,
     ).exists()
+
+
+def _submitting_member(user, org_id):
+    """Active non-staff membership a submission is saved against; None blocks the submit."""
+    if _user_is_org_staff(user, org_id):
+        return None
+    return OrganizationMember.objects.filter(user=user, organization_id=org_id, is_active=True).first()
 
 
 def _student_course_access_error_message(user, course, org_id=None):
@@ -1720,13 +1728,17 @@ class AssignmentSubmissionAPIView(APIView):
         if not assessment:
             return Response({'detail': 'No assessment for node.'}, status=status.HTTP_404_NOT_FOUND)
 
-        attempts = assessment.submissions.filter(student=request.user).count()
+        member = _submitting_member(request.user, node.module.course.organization_id)
+        if member is None:
+            return Response({'detail': MSG_ONLY_LEARNERS_SUBMIT}, status=status.HTTP_403_FORBIDDEN)
+
+        attempts = assessment.submissions.filter(student=member).count()
         if attempts >= assessment.max_attempts:
             return Response({'detail': 'Max attempts reached.'}, status=status.HTTP_403_FORBIDDEN)
 
         submission = AssignmentSubmission.objects.create(
             assessment=assessment,
-            student=request.user,
+            student=member,
             payload=request.data.get('payload', {}),
             status='Pending'
         )
@@ -1976,9 +1988,13 @@ class TaskSubmissionAPIView(APIView):
         if not hasattr(node, 'task'):
             return Response({'error': ERROR_NODE_NO_TASK}, status=status.HTTP_400_BAD_REQUEST)
 
+        member = _submitting_member(request.user, node.module.course.organization_id)
+        if member is None:
+            return Response({'detail': MSG_ONLY_LEARNERS_SUBMIT}, status=status.HTTP_403_FORBIDDEN)
+
         serializer = TaskSubmissionSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
-            serializer.save(student=request.user, task=node.task)
+            serializer.save(student=member, task=node.task)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -2060,8 +2076,12 @@ class QuizSubmissionAPIView(APIView):
         if error_response is not None:
             return Response(error_response, status=status.HTTP_403_FORBIDDEN)
 
+        member = _submitting_member(request.user, quiz.node.module.course.organization_id)
+        if member is None:
+            return Response({'detail': MSG_ONLY_LEARNERS_SUBMIT}, status=status.HTTP_403_FORBIDDEN)
+
         serializer = QuizSubmissionSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
-            submission = serializer.save(quiz=quiz)
+            submission = serializer.save(quiz=quiz, student=member)
             return Response(QuizSubmissionSerializer(submission, context={'request': request}).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
