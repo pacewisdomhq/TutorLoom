@@ -1678,7 +1678,7 @@ class QuizSubmissionSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         answers_data = validated_data.pop('answers', [])
-        student = self.context['request'].user
+        student = validated_data.pop('student')
         quiz = validated_data['quiz']
 
         attempt_number = QuizSubmission.objects.filter(student=student, quiz=quiz).count() + 1
