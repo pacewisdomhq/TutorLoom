@@ -6,10 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.0.3] - 2026-11-10
+
 ### Security
 
 - Assignment submissions now check that the learner is enrolled in the course, as task and quiz submissions already do. Before this, any learner of the organisation could submit an assignment in a course they were not enrolled in. Reported by Santoshkumarpuppala.
-- Updated dompurify 3.4.17 and fflate (both used by jsPDF), the build tools @babel/core and esbuild, and the poetry.lock entries for urllib3, sqlparse, idna and Pygments, clearing their Dependabot alerts. minimatch stays open: it is used only by ESLint, whose latest release still requires minimatch 10.
+- Updated dompurify to 3.4.17 and fflate (both used by jsPDF), the build tools @babel/core and esbuild, and the poetry.lock entries for urllib3, sqlparse, idna and Pygments, clearing their Dependabot alerts. minimatch stays open: it is used only by the ESLint toolchain, whose latest release still requires minimatch 10.
 
 ### Changed
 
@@ -68,7 +70,8 @@ First stable release of TutorLoom, the open-source learning management system.
 
 - Rate limiting on the login, password reset, and invite endpoints.
 
-[Unreleased]: https://github.com/pacewisdomhq/TutorLoom/compare/v1.0.2...HEAD
+[Unreleased]: https://github.com/pacewisdomhq/TutorLoom/compare/v1.0.3...HEAD
+[1.0.3]: https://github.com/pacewisdomhq/TutorLoom/releases/tag/v1.0.3
 [1.0.2]: https://github.com/pacewisdomhq/TutorLoom/releases/tag/v1.0.2
 [1.0.1]: https://github.com/pacewisdomhq/TutorLoom/releases/tag/v1.0.1
 [1.0.0]: https://github.com/pacewisdomhq/TutorLoom/releases/tag/v1.0.0
