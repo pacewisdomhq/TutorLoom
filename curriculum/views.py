@@ -1724,6 +1724,9 @@ class AssignmentSubmissionAPIView(APIView):
 
     def post(self, request, node_id):
         node = get_object_or_404(Node, id=node_id)
+        if not _student_has_active_node_access(request.user, node, org_id=node.module.course.organization_id):
+            return Response({'detail': COURSE_ACCESS_DENIED}, status=status.HTTP_403_FORBIDDEN)
+
         assessment = getattr(node, 'assessment', None)
         if not assessment:
             return Response({'detail': 'No assessment for node.'}, status=status.HTTP_404_NOT_FOUND)

@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Security
 
+- Assignment submissions now check that the learner is enrolled in the course, as task and quiz submissions already do. Before this, any learner of the organisation could submit an assignment in a course they were not enrolled in. Reported by Santoshkumarpuppala.
 - Updated dompurify 3.4.17 and fflate (both used by jsPDF), the build tools @babel/core and esbuild, and the poetry.lock entries for urllib3, sqlparse, idna and Pygments, clearing their Dependabot alerts. minimatch stays open: it is used only by ESLint, whose latest release still requires minimatch 10.
 
 ### Changed

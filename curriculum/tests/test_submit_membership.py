@@ -19,6 +19,7 @@ from organizations.models import Batch, BatchStudent, Organization, Organization
 from rbac.models import Role
 
 ONLY_LEARNERS = 'Only learners of this organisation can submit.'
+COURSE_ACCESS_DENIED = 'Course access is not active for this student.'
 
 
 @pytest.fixture
@@ -87,9 +88,21 @@ def test_outsider_cannot_join_by_submitting_assignment(setup):
     resp = _assignment(outsider, setup)
 
     assert resp.status_code == 403
-    assert resp.data["detail"] == ONLY_LEARNERS
+    assert resp.data["detail"] == COURSE_ACCESS_DENIED
     assert not AssignmentSubmission.objects.exists()
     assert not OrganizationMember.objects.filter(user=outsider).exists()
+
+
+def test_member_not_enrolled_in_course_cannot_submit_assignment(setup):
+    learner = User.objects.create_user(email="learner@sub.com", password="password123")
+    student_role, _ = Role.objects.get_or_create(name="student")
+    OrganizationMember.objects.create(user=learner, organization=setup["org"], role=student_role)
+
+    resp = _assignment(learner, setup)
+
+    assert resp.status_code == 403
+    assert resp.data["detail"] == COURSE_ACCESS_DENIED
+    assert not AssignmentSubmission.objects.exists()
 
 
 @pytest.mark.parametrize("submit", [_assignment, _task, _quiz])
