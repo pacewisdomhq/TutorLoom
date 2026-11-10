@@ -1753,46 +1753,6 @@ class AssignmentSubmissionAPIView(APIView):
 
 
 @extend_schema(tags=['Courses'])
-class GradeSubmissionAPIView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    @extend_schema(
-        summary="View specific Task Submission for grading",
-        responses={200: TaskSubmissionSerializer}
-    )
-    def get(self, request, submission_id):
-        submission = get_object_or_404(TaskSubmission, id=submission_id)
-        serializer = TaskSubmissionSerializer(submission, context={'request': request})
-        return Response(serializer.data)
-
-    @extend_schema(
-        summary="Grade Task Submission",
-        request=inline_serializer(
-            name='GradeSubmissionRequest',
-            fields={
-                'awarded_score': serializers.IntegerField(),
-                'feedback': serializers.CharField(required=False)
-            }
-        ),
-        responses={200: TaskSubmissionSerializer}
-    )
-    def patch(self, request, submission_id):
-        submission = get_object_or_404(TaskSubmission, id=submission_id)
-        awarded_score = request.data.get('awarded_score')
-        if awarded_score is None:
-            return Response({'detail': 'awarded_score is required.'}, status=status.HTTP_400_BAD_REQUEST)
-
-        submission.awarded_score = awarded_score
-        submission.feedback = request.data.get('feedback', submission.feedback)
-        submission.status = 'Graded'
-        submission.graded_at = timezone.now()
-        submission.save()
-        
-        serializer = TaskSubmissionSerializer(submission, context={'request': request})
-        return Response(serializer.data)
-
-
-@extend_schema(tags=['Courses'])
 class TeacherTaskReviewAPIView(APIView):
     permission_classes = [IsOrgAdminOrTeacher]
 

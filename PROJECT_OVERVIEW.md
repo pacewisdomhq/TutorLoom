@@ -361,7 +361,7 @@ All endpoints are prefixed with `/api/`. Protected endpoints require: `Authoriza
 | Method | Endpoint | Description | Access |
 |---|---|---|---|
 | `GET` | `/api/organizations/{org_id}/pending-evaluations/` | List unreviewed student task submissions | Org Teacher |
-| `PATCH` | `/api/organizations/{org_id}/submissions/{submission_id}/grade/` | Grade student submission with score (0-100) & feedback | Org Teacher |
+| `POST` | `/api/organizations/{org_id}/submissions/tasks/{submission_id}/review/` | Approve or reject a task submission (decision), with optional score & feedback | Org Teacher |
 
 ### 8.7 Learner Progress & Excel Export
 | Method | Endpoint | Description | Access |

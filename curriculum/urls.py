@@ -18,7 +18,6 @@ from .views import (
     CompleteNodeAPIView,
     PendingEvaluationsAPIView,
     AssignmentSubmissionAPIView,
-    GradeSubmissionAPIView,
     TaskSubmissionAPIView,
     QuizSubmissionAPIView,
     LearnerProgressAPIView,
@@ -50,7 +49,6 @@ urlpatterns = [
     path('organizations/<int:org_id>/pending-evaluations/', PendingEvaluationsAPIView.as_view(), name='pending-evaluations'),
     path('nodes/<int:node_id>/complete/', CompleteNodeAPIView.as_view(), name='node-complete'),
     path('nodes/<int:node_id>/submit/', AssignmentSubmissionAPIView.as_view(), name='assignment-submission'),
-    path('submissions/<int:submission_id>/grade/', GradeSubmissionAPIView.as_view(), name='grade-submission'),
     path('organizations/<int:org_id>/submissions/tasks/<int:submission_id>/review/', TeacherTaskReviewAPIView.as_view(), name='teacher-task-review'),
 
     # ── TASK & QUIZ SUBMISSIONS ────────────────────────────────────────────────

@@ -10,7 +10,7 @@ from curriculum.views import PendingEvaluationsAPIView, AssignmentSubmissionAPIV
 factory = APIRequestFactory()
 from rest_framework.request import Request as DRFRequest
 from organizations.models import Organization
-from curriculum.models import Course, Module, Node, Assessment, AssignmentSubmission, StudentNodeProgress, Task, TaskSubmission
+from curriculum.models import Course, Module, Node, Assessment, AssignmentSubmission, StudentNodeProgress, Task
 from django.contrib.auth import get_user_model
 import json
 
@@ -229,34 +229,6 @@ def test_assignment_submission_attempts_and_evaluation():
     resp = view.post(request, node.id)
     assert resp.status_code == 403
     assert resp.data['detail'] == 'Max attempts reached.'
-
-
-@pytest.mark.django_db
-def test_grade_submission_and_progress_creation():
-    from django.utils.crypto import get_random_string
-    factory = APIRequestFactory()
-    user_model = get_user_model()
-    student = user_model.objects.create_user(email='st@c.com', password=get_random_string(12))
-
-    org = Organization.objects.create(name='C4', contact_email='c4@o.com')
-    course = Course.objects.create(organization=org, title='Course3', description='')
-    module = Module.objects.create(course=course, title='Mod3')
-    node = Node.objects.create(module=module, title='N3')
-    # Create a Task instead of Assessment because GradeSubmissionAPIView uses TaskSubmission
-    task = Task.objects.create(node=node, title="T")
-    submission = TaskSubmission.objects.create(task=task, student=student, payload={}, status='Pending')
-
-    # grade submission with passing score
-    patch_req = factory.patch('/', data=json.dumps({'awarded_score': 60, 'feedback': 'good'}), content_type='application/json')
-    patch_req.user = student
-    from curriculum.views import GradeSubmissionAPIView
-    view = GradeSubmissionAPIView()
-    request = view.initialize_request(patch_req)
-    request.user = student
-    view.request = request
-    view.kwargs = {'submission_id': submission.id}
-    resp = view.patch(request, submission.id)
-    assert resp.status_code in (200, 400)
 
 
 @pytest.mark.django_db
