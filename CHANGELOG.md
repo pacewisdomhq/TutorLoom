@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Security
+
+- Updated dompurify 3.4.17 and fflate (both used by jsPDF), the build tools @babel/core and esbuild, and the poetry.lock entries for urllib3, sqlparse, idna and Pygments, clearing their Dependabot alerts. minimatch stays open: it is used only by ESLint, whose latest release still requires minimatch 10.
+
 ### Changed
 
 - Dependency updates: Pillow 13, lucide-react 1, @testing-library/jest-dom 7, React 19.3.1, Vite 7.3, Vitest 5.1 and other minor and patch updates.
