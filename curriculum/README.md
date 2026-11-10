@@ -50,7 +50,7 @@ The `curriculum` module is the core learning content and course delivery engine.
   - `DELETE /api/organizations/{org_id}/courses/{course_id}/modules/{module_id}/nodes/{id}/`: Delete node.
 - **Evaluation & Grading**:
   - `GET /api/organizations/{org_id}/pending-evaluations/`: List unreviewed task submissions.
-  - `PATCH /api/organizations/{org_id}/submissions/{submission_id}/grade/`: Grade task submission.
+  - `POST /api/organizations/{org_id}/submissions/tasks/{submission_id}/review/`: Approve or reject a task submission, with optional score and feedback.
 - **Learner Progress & Reporting**:
   - `GET /api/organizations/{org_id}/learner-progress/`: View learner progress, status, and completion metrics.
   - `GET /api/organizations/{org_id}/learner-progress/export/`: Download multi-sheet styled Excel workbook reporting all learners, courses, and quiz scores.

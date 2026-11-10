@@ -23,7 +23,7 @@ from organizations.serializers import (
     StaffSerializer,
     StudentImportItemSerializer,
 )
-from curriculum.models import Course, Module, Node, Assessment, LearningMaterial, Task, Quiz, StudentNodeProgress, TaskSubmission, QuizSubmission
+from curriculum.models import Course, Module, Node, Assessment, LearningMaterial, Task, Quiz, StudentNodeProgress, QuizSubmission
 from curriculum.serializers import CourseSerializer
 from rbac.models import Role
 
@@ -202,22 +202,6 @@ class TestCurriculumCoverageBoost:
         url = reverse('pending-evaluations', kwargs={'org_id': self.org.id})
         resp = self.client.get(url)
         assert resp.status_code == 200
-
-    def test_grade_submission(self):
-        task = Task.objects.create(node=self.node, title='T')
-        submission = TaskSubmission.objects.create(task=task, student=self.user, payload={})
-        url = reverse('grade-submission', kwargs={'submission_id': submission.id})
-        
-        # Get
-        resp = self.client.get(url)
-        assert resp.status_code == 200
-        
-        # Patch success
-        resp = self.client.patch(url, {'awarded_score': 10, 'feedback': 'good'}, format='json')
-        assert resp.status_code == 200
-        submission.refresh_from_db()
-        assert submission.awarded_score == 10
-        assert submission.status == 'Graded'
 
     def test_account_auth_user_invite_and_reinvite_paths(self, monkeypatch):
         monkeypatch.setattr('accounts.views.render_branded_email', lambda **kwargs: '<html></html>')

@@ -149,33 +149,6 @@ def test_roadmap_hides_correct_answers(setup_data):
     assert "is_correct" not in option_data
 
 @pytest.mark.django_db
-def test_grade_task_submission(setup_data):
-    client = APIClient()
-    # Need admin/teacher to grade
-    admin = User.objects.create_superuser(email="admin_grade@test.com", password="password123")
-    client.force_authenticate(user=admin)
-    
-    submission = TaskSubmission.objects.create(
-        task=setup_data["task"],
-        student=setup_data["student"],
-        payload={"answer": "To be graded"}
-    )
-    
-    url = f"/api/submissions/{submission.id}/grade/"
-    data = {
-        "awarded_score": 85,
-        "feedback": "Good job!"
-    }
-    
-    response = client.patch(url, data, format='json')
-    
-    assert response.status_code == status.HTTP_200_OK
-    assert response.data["status"] == "Graded"
-    assert response.data["awarded_score"] == 85
-    assert response.data["feedback"] == "Good job!"
-    assert response.data["graded_at"] is not None
-
-@pytest.mark.django_db
 def test_learner_progress_tracking(setup_data):
     from organizations.models import Batch, BatchStudent
     client = APIClient()
