@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-11-10
+
+### Security
+
+- Course assignment, task and quiz submissions no longer create or change organisation memberships. Only active learners of the course's organisation can submit; organisation admins, teachers and superusers get 403.
+
 ## [1.0.0] - 2026-10-19
 
 First stable release of TutorLoom, the open-source learning management system.
@@ -47,5 +53,6 @@ First stable release of TutorLoom, the open-source learning management system.
 
 - Rate limiting on the login, password reset, and invite endpoints.
 
-[Unreleased]: https://github.com/pacewisdomhq/TutorLoom/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/pacewisdomhq/TutorLoom/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/pacewisdomhq/TutorLoom/releases/tag/v1.0.1
 [1.0.0]: https://github.com/pacewisdomhq/TutorLoom/releases/tag/v1.0.0
