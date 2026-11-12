@@ -6,9 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.0.4] - 2026-11-12
+
 ### Security
 
 - Organisation admins and teachers can no longer change, lock out or delete the shared account of a user who belongs to another organisation or is a platform admin, and only platform admins can now list users or read or edit another user's account through `/api/users/`. Teachers can no longer resend invites.
+- poetry.lock now pins Django 6.1.3, a Django security release.
+
+### Changed
+
+- poetry.lock now pins celery 5.7.0.
 
 ### Fixed
 
@@ -78,7 +85,8 @@ First stable release of TutorLoom, the open-source learning management system.
 
 - Rate limiting on the login, password reset, and invite endpoints.
 
-[Unreleased]: https://github.com/pacewisdomhq/TutorLoom/compare/v1.0.3...HEAD
+[Unreleased]: https://github.com/pacewisdomhq/TutorLoom/compare/v1.0.4...HEAD
+[1.0.4]: https://github.com/pacewisdomhq/TutorLoom/releases/tag/v1.0.4
 [1.0.3]: https://github.com/pacewisdomhq/TutorLoom/releases/tag/v1.0.3
 [1.0.2]: https://github.com/pacewisdomhq/TutorLoom/releases/tag/v1.0.2
 [1.0.1]: https://github.com/pacewisdomhq/TutorLoom/releases/tag/v1.0.1
