@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2026 Pace Wisdom Solutions Pvt. Ltd.
+# SPDX-License-Identifier: Apache-2.0
+
 """/api/users/ must not let any signed-in user list or edit other accounts, and
 org staff must not reinvite shared accounts."""
 

@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2026 Pace Wisdom Solutions Pvt. Ltd.
+# SPDX-License-Identifier: Apache-2.0
+
 """An org-scoped action must not change the shared User account (name, status,
 is_active, is_deleted) of someone it does not exclusively own."""
 
