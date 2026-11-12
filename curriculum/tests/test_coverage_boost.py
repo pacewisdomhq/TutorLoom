@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2026 Pace Wisdom Solutions Pvt. Ltd.
 # SPDX-License-Identifier: Apache-2.0
 
+from types import SimpleNamespace
 import json
 import pytest
 from datetime import timedelta
@@ -318,6 +319,7 @@ class TestCurriculumCoverageBoost:
             kwargs = {'org_pk': org.id}
 
         request = APIRequestFactory().post('/')
+        request.user = self.user  # superuser: may edit the shared account
         staff_serializer = StaffSerializer(data={
             'user_email': 'teacher@serializer.test',
             'first_name': 'Teach',
@@ -397,7 +399,7 @@ class TestCurriculumCoverageBoost:
             'last_name': 'Student',
             'phone_number': '555',
             'status': User.STATUS_PENDING,
-        }, partial=True)
+        }, partial=True, context={'request': SimpleNamespace(user=self.user)})
         assert serializer.is_valid(), serializer.errors
         serializer.save()
         student.refresh_from_db()

@@ -700,6 +700,14 @@ class UserViewSet(
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_permissions(self):
+        # IsSelf has no has_permission, so list is admin-only. `me` keeps IsAuthenticated.
+        if self.action == "list":
+            return [IsAdmin()]
+        if self.action in ["retrieve", "update", "partial_update"]:
+            return [(IsAdmin | IsSelf)()]
+        return super().get_permissions()
+
     def get_serializer_class(self):
         if self.action in ["update", "partial_update"]:
             return UserUpdateSerializer
@@ -872,6 +880,7 @@ class ReinviteView(APIView):
     )
     def post(self, request, identifier):
         from organizations.models import Organization, OrganizationMember
+        from organizations.accounts import can_reinvite
         import uuid
         import logging
 
@@ -900,7 +909,7 @@ class ReinviteView(APIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # 2. Permission check: Requester must be superuser or org_admin/teacher in an org where target is a member
+        # 2. Permission check: Requester must be superuser or org_admin of an org where target is a pending member
         target_memberships = OrganizationMember.objects.filter(
             user=target_user, is_active=True
         ).values_list('organization_id', flat=True)
@@ -914,11 +923,12 @@ class ReinviteView(APIView):
             admin_membership = OrganizationMember.objects.filter(
                 user=request.user,
                 organization_id__in=target_memberships,
-                role__name__in=['org_admin', 'teacher'],
+                role__name='org_admin',
                 is_active=True,
             ).select_related('organization').first()
 
-            if not admin_membership:
+            # Only a superuser may reinvite an active or shared account
+            if not admin_membership or not can_reinvite(target_user, admin_membership.organization):
                 return Response(
                     {"detail": "You do not have permission to reinvite this user."},
                     status=status.HTTP_403_FORBIDDEN,

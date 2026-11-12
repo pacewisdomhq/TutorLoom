@@ -83,6 +83,7 @@ def test_batchstudent_resends_invite_for_existing_inactive_user(mock_send_invite
     User.objects.create_user(
         email="inactive_student@x.com",
         is_active=False,
+        status=User.STATUS_PENDING,
     )
 
     view = BatchStudentViewSet()

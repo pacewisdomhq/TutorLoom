@@ -5,6 +5,7 @@ from rest_framework import serializers
 from .models import Organization, OrganizationMember, Batch, BatchStudent
 from accounts.models import User
 from accounts.views import _send_invite_link
+from .accounts import can_edit_shared_account, can_reinvite
 from accounts.validators import validate_non_dummy_email
 from rbac.models import Role
 from curriculum.models import Course
@@ -160,7 +161,7 @@ class OrganizationMemberSerializer(serializers.ModelSerializer):
             },
         )
 
-        if created or not user.is_active:
+        if created or can_reinvite(user, org):
             _send_invite_link(user.email, organization=org)
 
         role = Role.objects.get(name=role_name)
@@ -339,36 +340,31 @@ class StaffSerializer(serializers.ModelSerializer):
         for c in target_courses:
             c.teachers.add(user)
 
-    def _update_user_fields(self, user, validated_data):
+    def _update_user_fields(self, user, validated_data, org):
         """Helper to update basic user profile fields."""
         fields = ["first_name", "last_name", "phone_number"]
+        # status is never applied to an existing user from an org-scoped request
+        validated_data.pop("status", None)
+        editable = can_edit_shared_account(user, org, actor=self._actor())
         updated = False
         for field in fields:
             value = validated_data.pop(field, None)
-            if value is not None:
+            if value is not None and editable:
                 setattr(user, field, value)
                 updated = True
-                
-        status = validated_data.pop("status", None)
-        if status is not None:
-            user.status = status
-            if status in [User.STATUS_PENDING, User.STATUS_REINVITED, User.STATUS_EXPIRED, User.STATUS_INACTIVE]:
-                user.is_active = False
-            elif status == User.STATUS_ACTIVE:
-                user.is_active = True
-            elif status == User.STATUS_DELETED:
-                user.is_active = False
-                user.is_deleted = True
-            updated = True
-            
+
         if updated:
             user.save()
+
+    def _actor(self):
+        request = self.context.get("request")
+        return getattr(request, "user", None)
 
     def update(self, instance, validated_data):
         user = instance.user
         
         # 1. Update User Record Fields
-        self._update_user_fields(user, validated_data)
+        self._update_user_fields(user, validated_data, instance.organization)
 
         # 2. Handle Role Update
         role_name = validated_data.pop("role_name", None)
@@ -404,24 +400,15 @@ class StaffSerializer(serializers.ModelSerializer):
             email=email,
             defaults=defaults,
         )
-        if created or not user.is_active:
-            organization = Organization.objects.filter(id=org_id).first()
+        organization = Organization.objects.filter(id=org_id).first()
+        if created or can_reinvite(user, organization):
             _send_invite_link(user.email, organization=organization)
             user.refresh_from_db()
-        else:
+        elif can_edit_shared_account(user, organization, actor=self._actor()):
             user.first_name = first_name
             user.last_name = last_name
             if phone_number:
                 user.phone_number = phone_number
-            if status is not None:
-                user.status = status
-                if status in [User.STATUS_PENDING, User.STATUS_REINVITED, User.STATUS_EXPIRED, User.STATUS_INACTIVE]:
-                    user.is_active = False
-                elif status == User.STATUS_ACTIVE:
-                    user.is_active = True
-                elif status == User.STATUS_DELETED:
-                    user.is_active = False
-                    user.is_deleted = True
             user.save()
         return user
 
@@ -610,31 +597,24 @@ class BatchStudentSerializer(serializers.ModelSerializer):
         last_name = validated_data.pop('last_name', None)
         phone_number = validated_data.pop('phone_number', None)
         validated_data.pop('student', {})
-        status = validated_data.pop('status', None)
+        validated_data.pop('status', None)  # never applied to an existing user
 
         # Update User profile if any field is provided
         user = instance.student.user if hasattr(instance.student, 'user') else instance.student
         updated_user = False
-        if first_name is not None:
-            user.first_name = first_name
-            updated_user = True
-        if last_name is not None:
-            user.last_name = last_name
-            updated_user = True
-        if phone_number is not None:
-            user.phone_number = phone_number
-            updated_user = True
-        if status is not None:
-            user.status = status
-            if status in [User.STATUS_PENDING, User.STATUS_REINVITED, User.STATUS_EXPIRED, User.STATUS_INACTIVE]:
-                user.is_active = False
-            elif status == User.STATUS_ACTIVE:
-                user.is_active = True
-            elif status == User.STATUS_DELETED:
-                user.is_active = False
-                user.is_deleted = True
-            updated_user = True
-        
+        if can_edit_shared_account(
+            user, instance.batch.organization, actor=getattr(self.context.get('request'), 'user', None)
+        ):
+            if first_name is not None:
+                user.first_name = first_name
+                updated_user = True
+            if last_name is not None:
+                user.last_name = last_name
+                updated_user = True
+            if phone_number is not None:
+                user.phone_number = phone_number
+                updated_user = True
+
         if updated_user:
             user.save()
 
@@ -785,6 +765,8 @@ class OrganizationStudentListSerializer(serializers.ModelSerializer):
              self.fields['batch_ids'].queryset = Batch.objects.all()
 
     def get_status(self, obj):
+        if not obj.is_active:
+            return User.STATUS_INACTIVE
         return obj.user.effective_status
 
     def get_student_id(self, obj):
@@ -816,7 +798,10 @@ class OrganizationStudentListSerializer(serializers.ModelSerializer):
             }
         return None
 
-    def _update_user_profile(self, user, user_data):
+    def _update_user_profile(self, user, user_data, org):
+        request = self.context.get('request')
+        if not can_edit_shared_account(user, org, actor=getattr(request, 'user', None)):
+            return
         for field, value in user_data.items():
             setattr(user, field, value)
         user.save()
@@ -837,7 +822,7 @@ class OrganizationStudentListSerializer(serializers.ModelSerializer):
         # 1. Handle user profile updates (first_name, last_name, phone_number)
         user_data = validated_data.pop('user', None)
         if user_data:
-            self._update_user_profile(instance.user, user_data)
+            self._update_user_profile(instance.user, user_data, instance.organization)
 
         # 2. Extract custom student_id (student_id_number) from raw request data
         student_id_val = self._get_student_id_val()
