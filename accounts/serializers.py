@@ -239,6 +239,16 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             "status",
         ]
 
+    def validate_is_active(self, value):
+        if self.instance is not None and value == self.instance.is_active:
+            return value
+        request = self.context.get("request")
+        if not (request and request.user.is_authenticated and request.user.is_superuser):
+            from rbac.permissions import _get_user_roles
+            if not request or "admin" not in _get_user_roles(request):
+                raise serializers.ValidationError("Only administrators may update account activity.")
+        return value
+
     def validate_status(self, value):
         request = self.context.get("request")
         if not request or not request.user.is_authenticated:

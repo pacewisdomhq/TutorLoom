@@ -23,6 +23,7 @@ from rbac.models import Role
 from curriculum.models import Course, TaskSubmission, StudentNodeProgress, Node, Task
 from curriculum.serializers import TaskSubmissionSerializer
 from .models import Organization, OrganizationMember, Batch, BatchStudent
+from .accounts import can_edit_shared_account, can_reinvite
 from .serializers import (
     OrganizationSerializer, 
     OrganizationMemberSerializer, 
@@ -375,14 +376,13 @@ class StaffViewSet(viewsets.ModelViewSet):
             email=email,
             defaults=defaults,
         )
-        if created or not user.is_active:
+        if created or can_reinvite(user, organization):
             _send_invite_link(user.email, organization=organization)
-        else:
+        elif can_edit_shared_account(user, organization, actor=self.request.user):
             user.first_name = first_name
             user.last_name = last_name
             if phone_number:
                 user.phone_number = phone_number
-            user.status = User.STATUS_ACTIVE
             user.save()
         return user
 
@@ -740,7 +740,7 @@ class BatchStudentViewSet(viewsets.ModelViewSet):
                 "status": User.STATUS_PENDING,
             }
         )
-        if created or not user.is_active:
+        if created or can_reinvite(user, org):
             try:
                 _send_invite_link(user.email, organization=org)
             except Exception:
@@ -754,7 +754,8 @@ class BatchStudentViewSet(viewsets.ModelViewSet):
             member.roles.add(student_role)
         
         # 2. Update user profile information if provided in the file (patch style)
-        self._update_user_profile(user, first_name, last_name, phone_number)
+        if can_edit_shared_account(user, org, actor=self.request.user):
+            self._update_user_profile(user, first_name, last_name, phone_number)
         
         if target_batch and member.role.name == 'student':
             member.batches.add(target_batch)
@@ -827,7 +828,7 @@ class BatchStudentViewSet(viewsets.ModelViewSet):
             
         return get_object_or_404(Batch, id=target_batch_id, organization=org)
 
-    def _update_user_profile(self, user, first_name, last_name, phone_number, status=None):
+    def _update_user_profile(self, user, first_name, last_name, phone_number):
         updated = False
         if first_name != 'Student':
             user.first_name = first_name
@@ -838,17 +839,6 @@ class BatchStudentViewSet(viewsets.ModelViewSet):
         if phone_number:
             user.phone_number = phone_number
             updated = True
-        if status:
-            user.status = status
-            if status in [User.STATUS_PENDING, User.STATUS_REINVITED, User.STATUS_EXPIRED, User.STATUS_INACTIVE]:
-                user.is_active = False
-            elif status == User.STATUS_ACTIVE:
-                user.is_active = True
-            elif status == User.STATUS_DELETED:
-                user.is_active = False
-                user.is_deleted = True
-            updated = True
-        
         if updated:
             user.save()
             
@@ -959,10 +949,10 @@ class OrganizationStudentViewSet(viewsets.ModelViewSet):
             }
         )
         
-        if created or not user.is_active:
+        if created or can_reinvite(user, org):
             _send_invite_link(user.email, organization=org)
             user.refresh_from_db()
-        else:
+        elif can_edit_shared_account(user, org, actor=self.request.user):
             # Update user profile details
             user.first_name = first_name
             if last_name:
@@ -1085,14 +1075,18 @@ class OrganizationStudentViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(org_member, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         
-        # Check if is_active is being set to False
-        if 'is_active' in request.data and request.data['is_active'] is False:
-            org_member.user.is_active = False
-            org_member.user.save()
-        elif 'is_active' in request.data and request.data['is_active'] is True:
-            org_member.user.is_active = True
-            org_member.user.save()
-        
+        # The account follows the toggle only when this org owns it; otherwise only the
+        # membership changes (the serializer saves member.is_active).
+        is_active = request.data.get('is_active')
+        user = org_member.user
+        if is_active in (True, False) and can_edit_shared_account(user, org_member.organization, actor=request.user):
+            if is_active is False:
+                user.is_active = False
+                user.save()
+            elif user.status not in (User.STATUS_PENDING, User.STATUS_REINVITED, User.STATUS_EXPIRED):
+                user.is_active = True
+                user.save()
+
         self.perform_update(serializer)
         return Response(serializer.data)
 
@@ -1212,9 +1206,9 @@ class OrganizationStudentViewSet(viewsets.ModelViewSet):
                 "status": User.STATUS_PENDING,
             }
         )
-        if created or not user.is_active:
+        if created or can_reinvite(user, org):
             _send_invite_link(user.email, organization=org)
-        else:
+        elif can_edit_shared_account(user, org, actor=self.request.user):
             user.first_name = first_name
             if last_name:
                 user.last_name = last_name

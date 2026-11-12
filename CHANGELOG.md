@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Security
+
+- Organisation admins and teachers can no longer change, lock out or delete the shared account of a user who belongs to another organisation or is a platform admin, and only platform admins can now list users or read or edit another user's account through `/api/users/`. Teachers can no longer resend invites.
+
 ### Fixed
 
 - `pyproject.toml` now asks for celery with its redis extra, as `requirements.txt` does, so `poetry install --only main` installs everything the Redis broker needs.

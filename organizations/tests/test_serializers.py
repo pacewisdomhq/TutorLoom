@@ -64,6 +64,7 @@ def test_staff_serializer_resends_invite_for_existing_inactive_user(mock_send_in
     User.objects.create_user(
         email="inactive_staff@o.com",
         is_active=False,
+        status=User.STATUS_PENDING,
     )
 
     dummy_view = SimpleNamespace(kwargs={'org_pk': org.id})
@@ -141,6 +142,7 @@ def test_staff_serializer_update_syncs_user_fields_and_courses(monkeypatch):
             "assigned_courses": [course.id],
         },
         partial=True,
+        context={'request': SimpleNamespace(user=User.objects.create_superuser(email="su@o.com", password="p"))},
     )
     assert serializer.is_valid(), serializer.errors
     updated_member = serializer.save()
