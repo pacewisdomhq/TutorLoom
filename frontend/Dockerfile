@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # ── Frontend: Vite + React dev server ─────────────────────────────────────────
-# Vite 7 requires Node 20.19+ or 22.12+.
+# Vite 8 requires Node 20.19+ or 22.12+.
 FROM node:26-alpine
 
 WORKDIR /app

@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Changed
+
+- Frontend build tooling: Vite 8 and @vitejs/plugin-react 6. Production builds now target Chrome/Edge 111, Firefox 114 and Safari 16.4 or newer.
+
 ## [1.0.4] - 2026-11-12
 
 ### Security
