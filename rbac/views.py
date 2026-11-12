@@ -14,7 +14,7 @@ from rest_framework import serializers as drf_serializers
 
 from .models import Role, UserRole
 from .serializers import RoleSerializer, UserRoleSerializer
-from .permissions import IsSuperAdmin, IsAdmin, IsOrgAdmin
+from .permissions import IsSuperAdmin, IsAdmin, IsOrgAdmin, _get_user_roles
 from rest_framework.decorators import action
 
 
@@ -64,6 +64,8 @@ class RoleViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action == "org_roles":
             return [(IsOrgAdmin | IsSuperAdmin)()]
+        if self.action in ("create", "update", "partial_update", "destroy"):
+            return [IsSuperAdmin()]
         return super().get_permissions()
 
     def get_queryset(self):
@@ -145,18 +147,14 @@ class UserRoleViewSet(viewsets.ModelViewSet):
 
     ORG_ADMIN_SELF_MOD_ERROR = "Organization Admins cannot modify their own roles."
     ORG_ADMIN_OUT_OF_SCOPE_ERROR = "You can only manage roles for users within your organization."
+    ORG_ADMIN_ROLES = {"org_admin", "teacher", "student"}
 
     def _is_org_admin(self, request):
+        # Anyone who got past IsAdmin | IsOrgAdmin without being a superuser or a
+        # global admin is org-scoped, however their org_admin role is recorded.
         if not request.user or not request.user.is_authenticated:
             return False
-        if request.user.is_superuser:
-            return False
-        from organizations.models import OrganizationMember
-        return OrganizationMember.objects.filter(
-            user=request.user,
-            role__name="org_admin",
-            is_active=True
-        ).exists()
+        return not request.user.is_superuser and "admin" not in _get_user_roles(request)
 
     def _validate_org_admin_permission(self, request, target_user, role_to_assign=None, role_to_revoke=None, custom_superadmin_msg=None):
         if not self._is_org_admin(request):
@@ -171,6 +169,14 @@ class UserRoleViewSet(viewsets.ModelViewSet):
             from rest_framework.exceptions import PermissionDenied
             msg = custom_superadmin_msg or "Organization Admins cannot manage the superadmin role."
             raise PermissionDenied(msg)
+
+        from rest_framework.exceptions import PermissionDenied
+        for role in (role_to_assign, role_to_revoke):
+            if role and role.name not in self.ORG_ADMIN_ROLES:
+                raise PermissionDenied("Organization Admins can only manage the org_admin, teacher and student roles.")
+
+        if target_user.is_superuser or UserRole.objects.filter(user=target_user, role__name="admin").exists():
+            raise PermissionDenied("Organization Admins cannot manage the roles of platform admins.")
 
         from organizations.models import OrganizationMember
         my_orgs = OrganizationMember.objects.filter(
@@ -201,8 +207,8 @@ class UserRoleViewSet(viewsets.ModelViewSet):
             
         request = self.request
         if self._is_org_admin(request):
-            # Exclude superadmin assignments
-            qs = qs.exclude(role__name="superadmin")
+            # Exclude superadmin and admin assignments
+            qs = qs.exclude(role__name__in=["superadmin", "admin"])
             
             # Restrict to users in the same organization(s)
             from organizations.models import OrganizationMember
