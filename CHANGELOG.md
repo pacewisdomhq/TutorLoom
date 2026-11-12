@@ -6,9 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.0.5] - 2026-11-12
+
 ### Security
 
 - Only the super admin can now create, rename or delete roles through `/api/roles/`. Before this, any signed-in user could delete the org_admin role and rename the student role to org_admin, making every student an org admin of their own organisation. Org admins on `/api/user-roles/` are now scoped by their org_admin membership in every case, can only assign or remove the org_admin, teacher and student roles, and can no longer change the roles of a super admin.
+- If you ran 1.0.4 or earlier, check the `rbac_role` table: a clean install has exactly 4 rows, none with `is_deleted` true, 1 each for superadmin, org_admin, teacher and student. A missing role can be created again on next use, so a deleted row or a 5th row means a role was deleted or renamed. This release does not repair that, and a deleted or renamed role keeps its user assignments, so restore the rows by hand.
 
 ### Changed
 
@@ -93,7 +96,8 @@ First stable release of TutorLoom, the open-source learning management system.
 
 - Rate limiting on the login, password reset, and invite endpoints.
 
-[Unreleased]: https://github.com/pacewisdomhq/TutorLoom/compare/v1.0.4...HEAD
+[Unreleased]: https://github.com/pacewisdomhq/TutorLoom/compare/v1.0.5...HEAD
+[1.0.5]: https://github.com/pacewisdomhq/TutorLoom/releases/tag/v1.0.5
 [1.0.4]: https://github.com/pacewisdomhq/TutorLoom/releases/tag/v1.0.4
 [1.0.3]: https://github.com/pacewisdomhq/TutorLoom/releases/tag/v1.0.3
 [1.0.2]: https://github.com/pacewisdomhq/TutorLoom/releases/tag/v1.0.2
