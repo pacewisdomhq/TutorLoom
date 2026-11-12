@@ -25,14 +25,16 @@ export default defineConfig({
     allowedHosts: true,
   },
   build: {
-    rollupOptions: {
+    rolldownOptions: {
       output: {
-        manualChunks: {
-          // Split heavy vendor libs into separate chunks so Rollup can
-          // process them in parallel and browsers can cache them independently.
-          "vendor-react": ["react", "react-dom", "react-router-dom"],
-          "vendor-icons": ["lucide-react"],
-          "vendor-pdf": ["jspdf", "html2canvas"],
+        codeSplitting: {
+          // Split heavy vendor libs into separate chunks so browsers can
+          // cache them independently.
+          groups: [
+            { name: "vendor-react", test: /node_modules[\\/](react|react-dom|react-router|react-router-dom|scheduler)[\\/]/ },
+            { name: "vendor-icons", test: /node_modules[\\/]lucide-react[\\/]/ },
+            { name: "vendor-pdf", test: /node_modules[\\/](jspdf|html2canvas)[\\/]/ },
+          ],
         },
       },
     },
