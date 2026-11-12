@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Security
+
+- Only the super admin can now create, rename or delete roles through `/api/roles/`. Before this, any signed-in user could delete the org_admin role and rename the student role to org_admin, making every student an org admin of their own organisation. Org admins on `/api/user-roles/` are now scoped by their org_admin membership in every case, can only assign or remove the org_admin, teacher and student roles, and can no longer change the roles of a super admin.
+
 ### Changed
 
 - Frontend build tooling: Vite 8 and @vitejs/plugin-react 6. Production builds now target Chrome/Edge 111, Firefox 114 and Safari 16.4 or newer.
