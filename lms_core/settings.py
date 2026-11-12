@@ -220,7 +220,7 @@ SPECTACULAR_SETTINGS = {
         "**Authentication:** All protected endpoints require a Bearer JWT token.\n"
         "Use `POST /api/auth/login/` with your email and password to obtain tokens, then click **Authorize** above."
     ),
-    "VERSION": "1.0.4",
+    "VERSION": "1.0.5",
     "SERVE_INCLUDE_SCHEMA": False,
     "COMPONENT_SPLIT_REQUEST": True,
     "SECURITY": [{"BearerAuth": []}],
