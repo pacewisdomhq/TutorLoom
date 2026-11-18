@@ -201,14 +201,14 @@ MSG_ACCOUNT_INACTIVE = "Account is inactive. Please contact support."
 MSG_ORG_INACTIVE = "Your account is associated with an inactive organization. Please contact your administrator."
 
 def _handle_expired_user_status(email):
-    """Update user status to EXPIRED if they exist and are not active/deleted."""
+    """Mark a pending or reinvited user as EXPIRED; other statuses are left as they are."""
     user = User.all_objects.filter(email=email, is_deleted=False).first()
     if not user:
         user = User.all_objects.filter(email=email, is_deleted=True).first()
     if user:
         if user.is_deleted:
             return MSG_DELETED_ACCOUNT
-        if user.status not in [User.STATUS_ACTIVE, User.STATUS_DELETED]:
+        if user.status in [User.STATUS_PENDING, User.STATUS_REINVITED]:
             user.status = User.STATUS_EXPIRED
             user.save(update_fields=["status"])
     return MSG_INVITE_EXPIRED
@@ -793,6 +793,12 @@ class AcceptInviteView(APIView):
         if not user:
             return Response(
                 {"detail": MSG_USER_NOT_FOUND}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if not user.is_active and user.effective_status not in [User.STATUS_PENDING, User.STATUS_REINVITED]:
+            return Response(
+                {"detail": MSG_ACCOUNT_INACTIVE},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         # Set the new password

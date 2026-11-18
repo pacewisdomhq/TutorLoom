@@ -743,6 +743,7 @@ class BatchStudentViewSet(viewsets.ModelViewSet):
         if created or can_reinvite(user, org):
             try:
                 _send_invite_link(user.email, organization=org)
+                user.refresh_from_db()
             except Exception:
                 pass
         member, member_created = OrganizationMember.objects.get_or_create(

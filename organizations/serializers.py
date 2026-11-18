@@ -230,15 +230,15 @@ class StaffSerializer(serializers.ModelSerializer):
         if org_id:
             from curriculum.models import Course
             self.fields['assigned_courses'].child_relation.queryset = Course.objects.filter(organization_id=org_id)
-            self.fields['batches'].queryset = Batch.objects.filter(organization_id=org_id)
+            self.fields['batches'].child_relation.queryset = Batch.objects.filter(organization_id=org_id)
         elif self.instance and isinstance(self.instance, OrganizationMember):
             from curriculum.models import Course
             self.fields['assigned_courses'].child_relation.queryset = Course.objects.filter(organization=self.instance.organization)
-            self.fields['batches'].queryset = Batch.objects.filter(organization=self.instance.organization)
+            self.fields['batches'].child_relation.queryset = Batch.objects.filter(organization=self.instance.organization)
         else:
              from curriculum.models import Course
              self.fields['assigned_courses'].child_relation.queryset = Course.objects.all()
-             self.fields['batches'].queryset = Batch.objects.all()
+             self.fields['batches'].child_relation.queryset = Batch.objects.all()
 
     def to_internal_value(self, data):
         if isinstance(data, dict) and 'assigned_courses' in data and data['assigned_courses'] is None:
@@ -493,7 +493,7 @@ class BatchSerializer(serializers.ModelSerializer):
         if request and 'view' in self.context:
             org_id = self.context['view'].kwargs.get('org_pk')
             if org_id:
-                self.fields['courses'].queryset = Course.objects.filter(organization_id=org_id)
+                self.fields['courses'].child_relation.queryset = Course.objects.filter(organization_id=org_id)
 
     def get_courses_detail(self, obj):
         return [
@@ -754,15 +754,15 @@ class OrganizationStudentListSerializer(serializers.ModelSerializer):
         if org_id:
             from curriculum.models import Course
             self.fields['course_id'].queryset = Course.objects.filter(organization_id=org_id)
-            self.fields['batch_ids'].queryset = Batch.objects.filter(organization_id=org_id)
+            self.fields['batch_ids'].child_relation.queryset = Batch.objects.filter(organization_id=org_id)
         elif self.instance and isinstance(self.instance, OrganizationMember):
             from curriculum.models import Course
             self.fields['course_id'].queryset = Course.objects.filter(organization=self.instance.organization)
-            self.fields['batch_ids'].queryset = Batch.objects.filter(organization=self.instance.organization)
+            self.fields['batch_ids'].child_relation.queryset = Batch.objects.filter(organization=self.instance.organization)
         else:
              from curriculum.models import Course
              self.fields['course_id'].queryset = Course.objects.all()
-             self.fields['batch_ids'].queryset = Batch.objects.all()
+             self.fields['batch_ids'].child_relation.queryset = Batch.objects.all()
 
     def get_status(self, obj):
         if not obj.is_active:
