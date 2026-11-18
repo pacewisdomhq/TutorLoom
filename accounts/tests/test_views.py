@@ -370,7 +370,9 @@ def test_accept_invite_invalid_token():
 def test_accept_invite_success():
     client = APIClient()
     signer = TimestampSigner()
-    user = User.objects.create_user(email="invite@lms.com", is_active=False, username="invite_user")
+    user = User.objects.create_user(
+        email="invite@lms.com", is_active=False, status=User.STATUS_PENDING, username="invite_user"
+    )
     valid_token = signer.sign(user.email)
 
     response = client.post("/api/auth/accept-invite/", {"token": valid_token, "password": NEW_VAL})

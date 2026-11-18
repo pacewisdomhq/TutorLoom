@@ -104,6 +104,7 @@ def test_accept_invite_activates_user_and_returns_tokens():
         first_name="Bob",
         last_name="Builder",
         is_active=False,
+        status=User.STATUS_PENDING,
     )
 
     signer = TimestampSigner()
