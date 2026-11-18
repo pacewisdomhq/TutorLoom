@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.0.6] - 2026-11-18
+
+### Security
+
+- The student, staff and batch forms now only accept batches and courses of the organisation in the URL. Before this, a teacher or org admin could put their students into another organisation's batches and link another organisation's courses to their batches, and an org admin could add staff to another organisation's batch, which gave that user an active teacher membership there. Links and memberships made before this release are not removed; see GHSA-gh7w-w5hp-f8v8 for what to check.
+- Accept-invite now refuses a deactivated account, so a password reset token can no longer be used to switch a deactivated user back on. An expired token no longer marks a deactivated user as an expired invitee.
+
+### Fixed
+
+- Re-inviting an existing student from the batch screen no longer overwrites the new invite status and date with the old ones.
+
 ## [1.0.5] - 2026-11-12
 
 ### Security
@@ -96,7 +107,8 @@ First stable release of TutorLoom, the open-source learning management system.
 
 - Rate limiting on the login, password reset, and invite endpoints.
 
-[Unreleased]: https://github.com/pacewisdomhq/TutorLoom/compare/v1.0.5...HEAD
+[Unreleased]: https://github.com/pacewisdomhq/TutorLoom/compare/v1.0.6...HEAD
+[1.0.6]: https://github.com/pacewisdomhq/TutorLoom/releases/tag/v1.0.6
 [1.0.5]: https://github.com/pacewisdomhq/TutorLoom/releases/tag/v1.0.5
 [1.0.4]: https://github.com/pacewisdomhq/TutorLoom/releases/tag/v1.0.4
 [1.0.3]: https://github.com/pacewisdomhq/TutorLoom/releases/tag/v1.0.3
