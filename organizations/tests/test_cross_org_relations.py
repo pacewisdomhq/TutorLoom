@@ -32,6 +32,7 @@ def w():
     batch_b = Batch.objects.create(organization=b, name="B1", start_date=D1, end_date=D2)
     course_a = Course.objects.create(organization=a, title="Course A")
     course_b = Course.objects.create(organization=b, title="Course B")
+    batch_a.courses.add(course_a)
     teacher_b = _u("teacher-b@t.com")
     OrganizationMember.objects.create(organization=b, user=teacher_b, role=r["teacher"])
     UserRole.objects.get_or_create(user=teacher_b, role=r["teacher"])
@@ -74,6 +75,8 @@ def test_staff_cannot_be_put_in_another_orgs_batch(w):
     assert r.status_code == 400 and "batches" in r.data, r.data
     assert not w["batch_a"].staff_members.exists()
     assert not w["course_a"].teachers.exists()
+    # On 1.0.5 the course sync also created an active teacher membership in org A.
+    assert not OrganizationMember.objects.filter(organization=w["a"]).exists()
 
 
 def test_batch_cannot_link_another_orgs_course(w):
@@ -84,6 +87,6 @@ def test_batch_cannot_link_another_orgs_course(w):
     assert r.status_code == 400 and "courses" in r.data, r.data
     r = c.patch(f"{base}{w['batch_b'].pk}/", {"courses": [w["course_a"].pk]}, format="json")
     assert r.status_code == 400 and "courses" in r.data, r.data
-    assert not w["course_a"].batches.exists()
+    assert list(w["course_a"].batches.all()) == [w["batch_a"]]
     r = c.patch(f"{base}{w['batch_b'].pk}/", {"courses": [w["course_b"].pk]}, format="json")
     assert r.status_code == 200, r.data
