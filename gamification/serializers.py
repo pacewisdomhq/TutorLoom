@@ -35,6 +35,18 @@ class CertificateStudentSerializer(serializers.ModelSerializer):
         return name if name else obj.email
 
 
+class CertificatePublicStudentSerializer(serializers.ModelSerializer):
+    """Name only: anyone holding a verification code can read it."""
+    full_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'full_name']
+
+    def get_full_name(self, obj):
+        return f"{obj.first_name} {obj.last_name}".strip()
+
+
 class CertificateCourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
@@ -97,3 +109,8 @@ class CertificateSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         path = f"/api/certificates/{obj.certificate_id}/html/"
         return request.build_absolute_uri(path) if request else path
+
+
+class CertificatePublicSerializer(CertificateSerializer):
+    """Used by the anonymous verification route; leaves out the student's email and user id."""
+    student = CertificatePublicStudentSerializer(read_only=True)

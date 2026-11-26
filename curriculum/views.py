@@ -1677,7 +1677,7 @@ class ExportAllLearnersProgressAPIView(LearnerProgressAPIView):
 
 @extend_schema(tags=['Courses'])
 class NodeSubmissionDetailAPIView(APIView):
-    permission_classes = [IsOrgAdminOrTeacher]
+    permission_classes = [IsCourseAdminOrTeacher]
 
     @extend_schema(
         summary="Get Submissions for specific Node (Task/Quiz)",
@@ -1700,6 +1700,7 @@ class NodeSubmissionDetailAPIView(APIView):
             )
 
         node = get_object_or_404(Node, id=node_id, module__course_id=course_id, module__course__organization_id=org_id)
+        self.check_object_permissions(request, node)
         student = get_object_or_404(User, id=student_id)
 
         task_submissions = []
@@ -1757,7 +1758,7 @@ class AssignmentSubmissionAPIView(APIView):
 
 @extend_schema(tags=['Courses'])
 class TeacherTaskReviewAPIView(APIView):
-    permission_classes = [IsOrgAdminOrTeacher]
+    permission_classes = [IsCourseAdminOrTeacher]
 
     @extend_schema(
         summary="Teacher: Approve/Reject Task Submission",
@@ -1771,6 +1772,7 @@ class TeacherTaskReviewAPIView(APIView):
             id=submission_id,
             task__node__module__course__organization_id=org_id
         )
+        self.check_object_permissions(request, submission.task.node)
 
         serializer = TaskReviewSerializer(data=request.data)
         if not serializer.is_valid():

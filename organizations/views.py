@@ -87,6 +87,28 @@ def _clean_phone(val):
     return val
 
 
+def _check_staff_enrolment(org, email, actor):
+    """
+    Only an org admin (or a superuser) may enrol the organisation's own staff as learners.
+
+    Without this a teacher could give the org admin or another teacher the student role
+    and then deactivate, delete or reassign them through the student endpoints.
+    """
+    if not OrganizationMember.objects.filter(
+        organization=org, user__email__iexact=email, role__name__in=OrganizationMember.STAFF_ROLE_NAMES
+    ).exists():
+        return
+    if actor.is_superuser or OrganizationMember.objects.filter(
+        user=actor, organization=org, role__name='org_admin', is_active=True
+    ).exists():
+        return
+    from rest_framework.exceptions import ValidationError
+    raise ValidationError(
+        f"'{email}' is a staff member of this organisation. "
+        "Only an organisation admin can enrol staff as learners."
+    )
+
+
 def _parse_file_to_df(file_obj):
     file_name = file_obj.name.lower()
     try:
@@ -705,6 +727,7 @@ class BatchStudentViewSet(viewsets.ModelViewSet):
     # 3. Updated helper to accept course_override
     def _process_single_student(self, student_info, org, default_batch, course_override=None, default_status=None):
         email = student_info['email']
+        _check_staff_enrolment(org, email, self.request.user)
         first_name = student_info.get('first_name', 'Student')
         last_name = student_info.get('last_name', '')
         phone_number = student_info.get('phone_number', '')
@@ -1004,7 +1027,7 @@ class OrganizationStudentViewSet(viewsets.ModelViewSet):
             qs = OrganizationMember.objects.filter(
                 Q(user__is_active=True) | Q(user__status__in=['pending', 'reinvited']),
                 organization_id=org_id,
-                roles__name='student',
+                role__name='student',
                 organization__is_active=True,
                 user__is_deleted=False
             ).select_related('user', 'course', 'role').prefetch_related(
@@ -1017,7 +1040,7 @@ class OrganizationStudentViewSet(viewsets.ModelViewSet):
             qs = OrganizationMember.objects.filter(
                 Q(user__is_active=True) | Q(user__status__in=['pending', 'reinvited']),
                 organization_id=org_id,
-                roles__name='student',
+                role__name='student',
                 organization__is_active=True,
                 user__is_deleted=False
             ).select_related('user', 'batch', 'course', 'role').prefetch_related(
@@ -1191,6 +1214,7 @@ class OrganizationStudentViewSet(viewsets.ModelViewSet):
             last_name = student_info.get('last_name', '')
             phone_number = _clean_phone(student_info.get('phone_number', ''))
             
+            _check_staff_enrolment(org, email, request.user)
             user = self._get_or_create_student_user(email, first_name, last_name, phone_number, org)
             member = self._get_or_create_student_member(org, user, student_role)
             created_members.append(member)

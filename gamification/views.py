@@ -13,8 +13,8 @@ from accounts.models import User
 from curriculum.models import Course
 from organizations.models import Organization, OrganizationMember
 from .models import Certificate, CertificateTemplate
-from .serializers import CertificateSerializer, CertificateTemplateSerializer
-from django.http import HttpResponse
+from .serializers import CertificatePublicSerializer, CertificateSerializer, CertificateTemplateSerializer
+from django.http import Http404, HttpResponse
 from .utils import (
     get_or_create_course_certificate,
     is_course_completed_for_student,
@@ -180,7 +180,7 @@ class CertificateDetailAPIView(APIView):
     @extend_schema(
         summary="Verify Certificate",
         description="Verify and retrieve certificate details by verification code.",
-        responses={200: CertificateSerializer}
+        responses={200: CertificatePublicSerializer}
     )
     def get(self, request, certificate_id):
         cert = get_object_or_404(
@@ -188,7 +188,7 @@ class CertificateDetailAPIView(APIView):
             certificate_id=certificate_id,
             is_deleted=False
         )
-        return Response(CertificateSerializer(cert, context={'request': request}).data)
+        return Response(CertificatePublicSerializer(cert, context={'request': request}).data)
 
 
 @extend_schema(tags=['Certificates'])
@@ -197,7 +197,7 @@ class CertificateDownloadAPIView(APIView):
     Download endpoint for a certificate within an organization.
     Defaults to streaming the backend-generated PDF, with ?format=json fallback.
     """
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     @extend_schema(
         summary="Download Certificate PDF (Org Scope)",
@@ -210,6 +210,9 @@ class CertificateDownloadAPIView(APIView):
             organization_id=org_id,
             is_deleted=False
         )
+        # 404, not 403, so certificate ids cannot be probed.
+        if cert.student_id != request.user.id and not request.user.is_staff and not request.user.is_superuser:
+            raise Http404
         if request.GET.get('format') == 'json':
             return Response(CertificateSerializer(cert, context={'request': request}).data)
 
@@ -224,7 +227,7 @@ class CertificateDownloadAPIView(APIView):
 @extend_schema(tags=['Certificates'])
 class CertificatePdfDownloadAPIView(APIView):
     """
-    Direct PDF download endpoint by certificate code (e.g. CERT-C-1-DEEFDA1C) or numeric ID.
+    Direct PDF download endpoint by certificate code (e.g. CERT-C-1-DEEFDA1C).
     Generates and streams the high-fidelity A4 landscape PDF from the backend HTML template.
     """
     permission_classes = [AllowAny]
@@ -234,13 +237,9 @@ class CertificatePdfDownloadAPIView(APIView):
         description="Generates and downloads the official PDF certificate directly from the backend HTML template.",
     )
     def get(self, request, certificate_id):
-        lookup = Q(certificate_id=certificate_id)
-        if str(certificate_id).isdigit():
-            lookup |= Q(id=int(certificate_id))
-
         cert = get_object_or_404(
             Certificate.objects.select_related('course', 'organization', 'template', 'student'),
-            lookup,
+            certificate_id=certificate_id,
             is_deleted=False
         )
 
@@ -265,13 +264,9 @@ class CertificateHtmlPreviewAPIView(APIView):
         description="Returns the raw backend-rendered HTML template for iframe or browser preview.",
     )
     def get(self, request, certificate_id):
-        lookup = Q(certificate_id=certificate_id)
-        if str(certificate_id).isdigit():
-            lookup |= Q(id=int(certificate_id))
-
         cert = get_object_or_404(
             Certificate.objects.select_related('course', 'organization', 'template', 'student'),
-            lookup,
+            certificate_id=certificate_id,
             is_deleted=False
         )
 
