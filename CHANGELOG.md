@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.0.7] - 2026-11-26
+
+### Security
+
+- Certificates can no longer be read by their numeric id without a login. The public preview and PDF routes now look a certificate up by its verification code only, the organisation download route needs the certificate's owner or platform staff, and the public verify response no longer includes the student's email or user id. Before this, an anonymous visitor could walk ids and collect every certificate holder's name, email and verification code.
+- A teacher can no longer enrol the org admin, another teacher or themselves as a student and then deactivate, delete or reassign them through the student endpoints, which also let a teacher give themselves edit rights on a course they were not assigned to. Only an org admin or a superuser can enrol staff as learners now, and the student endpoints only act on members whose main role is student. Enrolments made before this release are not undone; see GHSA-xp5j-qp7x-x97q for what to check.
+- Reading a student's submissions for a node and reviewing a task submission now need the course assignment, so a teacher can no longer read or grade work in courses they do not teach.
+
+### Changed
+
+- A staff member enrolled as a learner by an org admin still shows in the batch, but no longer in the organisation-wide student list.
+- In an archived course only the org admin or a superuser can read a student's submissions or review task submissions, as with the rest of that course's content.
+
 ## [1.0.6] - 2026-11-18
 
 ### Security
@@ -107,7 +120,8 @@ First stable release of TutorLoom, the open-source learning management system.
 
 - Rate limiting on the login, password reset, and invite endpoints.
 
-[Unreleased]: https://github.com/pacewisdomhq/TutorLoom/compare/v1.0.6...HEAD
+[Unreleased]: https://github.com/pacewisdomhq/TutorLoom/compare/v1.0.7...HEAD
+[1.0.7]: https://github.com/pacewisdomhq/TutorLoom/releases/tag/v1.0.7
 [1.0.6]: https://github.com/pacewisdomhq/TutorLoom/releases/tag/v1.0.6
 [1.0.5]: https://github.com/pacewisdomhq/TutorLoom/releases/tag/v1.0.5
 [1.0.4]: https://github.com/pacewisdomhq/TutorLoom/releases/tag/v1.0.4
